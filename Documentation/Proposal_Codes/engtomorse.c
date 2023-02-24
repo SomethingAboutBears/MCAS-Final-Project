@@ -2,7 +2,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include<math.h>
-//Declare Brute force adder function that returns a unsigned long and takes in an unsigned long
 char* tomorse(char c,char* output);
 
 int main() {
