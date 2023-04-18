@@ -1,1 +1,196 @@
+#include <Adafruit_Arcada.h>
+#include <Adafruit_SPIFlash.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_LSM6DS33.h>
+#include <Adafruit_LIS3MDL.h>
+#include <Adafruit_SHT31.h>
+#include <Adafruit_APDS9960.h>
+#include <Adafruit_BMP280.h>
+#include <PDM.h>
 
+#define WHITE_LED 43
+
+Adafruit_Arcada arcada;
+Adafruit_LSM6DS33 lsm6ds33;
+Adafruit_LIS3MDL lis3mdl;
+Adafruit_SHT31 sht30;
+Adafruit_APDS9960 apds9960;
+Adafruit_BMP280 bmp280;
+extern PDMClass PDM;
+extern Adafruit_FlashTransport_QSPI flashTransport;
+extern Adafruit_SPIFlash Arcada_QSPI_Flash;
+
+uint32_t buttons, last_buttons;
+uint8_t j = 0;  // neopixel counter for rainbow
+// Added:
+uint8_t i =0; // Character counter for filling the array
+uint8_t k = 1; // Assistant Character counter to tell when to print to the next line
+uint8_t x = 1; // Character counter for typing on the screen
+char Morse[200];
+uint8_t characters[sizeof(Morse)] = {0};
+
+// Check the timer callback, this function is called every millisecond!
+volatile uint16_t milliseconds = 0;
+void timercallback() {
+  analogWrite(LED_BUILTIN, milliseconds);  // pulse the LED
+  if (milliseconds == 0) {
+    milliseconds = 255;
+  } else {
+    milliseconds--;
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  // enable NFC pins  
+  if ((NRF_UICR->NFCPINS & UICR_NFCPINS_PROTECT_Msk) == (UICR_NFCPINS_PROTECT_NFC << UICR_NFCPINS_PROTECT_Pos)){
+    Serial.println("Fix NFC pins");
+    NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Wen << NVMC_CONFIG_WEN_Pos;
+    while (NRF_NVMC->READY == NVMC_READY_READY_Busy);
+    NRF_UICR->NFCPINS &= ~UICR_NFCPINS_PROTECT_Msk;
+    while (NRF_NVMC->READY == NVMC_READY_READY_Busy);
+    NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Ren << NVMC_CONFIG_WEN_Pos;
+    while (NRF_NVMC->READY == NVMC_READY_READY_Busy);
+    Serial.println("Done");
+    NVIC_SystemReset();
+  }
+  
+  pinMode(WHITE_LED, OUTPUT);
+  digitalWrite(WHITE_LED, LOW);
+
+  Serial.println("Hello! Arcada Clue test");
+  if (!arcada.arcadaBegin()) {
+    Serial.print("Failed to begin");
+    while (1);
+  }
+  arcada.displayBegin();
+  Serial.println("Arcada display begin");
+
+  for (int i=0; i<250; i+=10) {
+    arcada.setBacklight(i);
+    delay(1);
+  }
+
+  arcada.display->setCursor(0, 0);
+  arcada.display->setTextWrap(true);
+  arcada.display->setTextSize(2);
+  
+  /********** Check MIC */
+  PDM.onReceive(onPDMdata);
+  if (!PDM.begin(1, 16000)) {
+    Serial.println("**Failed to start PDM!");
+  }
+  
+
+  buttons = last_buttons = 0;
+  arcada.timerCallback(1000, timercallback);
+  arcada.display->setTextWrap(false);
+}
+
+
+void loop() {
+  arcada.display->setTextColor(ARCADA_WHITE, ARCADA_BLACK);
+  arcada.display->setCursor(0, 50);
+  
+  //arcada.display->print("Testing");
+  //arcada.display->println("         ");
+
+// Need to make a string, and the print the entire string to the screen. Can append the string as the button inputs are made
+// Need to get rid of x and y?
+  uint8_t pressed_buttons = arcada.readButtons();
+    // If the left button was pressed
+    if (pressed_buttons & ARCADA_BUTTONMASK_A) {
+      strcat (Morse,".");
+      characters[i]=1;
+      //arcada.display->print(".");
+      //arcada.display->setCursor(x,100);
+      i++;
+      delay(100);
+    } 
+    // If the right button was pressed
+    if (pressed_buttons & ARCADA_BUTTONMASK_B){
+      strcat (Morse,"-");
+      characters[i]=1;
+      //arcada.display->print("-");
+      //arcada.display->setCursor(x,100);
+      i++;
+      delay(100);
+    }
+    //x++;
+    // Display is 240 x 240 pixels
+    // 20 characters is the max per line (does not matter if "." or "-")
+
+    // Is there a way to save the what has been printed before, can reprint that and then only add the new element?
+
+    for (x=0;x<i;x++){
+      arcada.display->print(Morse[x]);
+      if (x==(k*20)-1){
+        arcada.display->println("         ");
+        k++;
+      }
+    }
+    k=1;
+
+    // I could just split the string up, and print it in chunks of 20 characters
+
+    
+
+    last_buttons = buttons;
+
+}
+
+
+// Input a value 0 to 255 to get a color value.
+// The colours are a transition r - g - b - back to r.
+uint32_t Wheel(byte WheelPos) {
+  if(WheelPos < 85) {
+   return arcada.pixels.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+  } else if(WheelPos < 170) {
+   WheelPos -= 85;
+   return arcada.pixels.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  } else {
+   WheelPos -= 170;
+   return arcada.pixels.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  }
+}
+
+
+/*****************************************************************/
+
+int16_t minwave, maxwave;
+short sampleBuffer[256];// buffer to read samples into, each sample is 16-bits
+volatile int samplesRead;// number of samples read
+
+int32_t getPDMwave(int32_t samples) {
+  minwave = 30000;
+  maxwave = -30000;
+  
+  while (samples > 0) {
+    if (!samplesRead) {
+      yield();
+      continue;
+    }
+    for (int i = 0; i < samplesRead; i++) {
+      minwave = min(sampleBuffer[i], minwave);
+      maxwave = max(sampleBuffer[i], maxwave);
+      //Serial.println(sampleBuffer[i]);
+      samples--;
+    }
+    // clear the read count
+    samplesRead = 0;
+  }
+  return maxwave-minwave;  
+}
+
+
+void onPDMdata() {
+  // query the number of bytes available
+  int bytesAvailable = PDM.available();
+
+  // read into the sample buffer
+  PDM.read(sampleBuffer, bytesAvailable);
+
+  // 16-bit, 2 bytes per sample
+  samplesRead = bytesAvailable / 2;
+}
