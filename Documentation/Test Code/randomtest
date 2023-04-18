@@ -1,1 +1,12 @@
-
+char Morse[200]; // Complete phrase
+char WordOne[20]; // Each word will be added up to make up the complete "Morse: phrase
+char WordTwo[20];
+char WordThree[20];
+char WordFour[20];
+char WordFive[20];
+char WordSix[20];
+char WordSeven[20];
+char WordEight[20];
+char WordNine[20];
+char WordTen[20];
+Morse = WordOne + " " + WordTwo + " " + WordThree + " " + WordFour + " " + WordFive + " " + WordSix + " " + WordSeven + " " + WordEight + " " + WordNine + " " + WordTen;
