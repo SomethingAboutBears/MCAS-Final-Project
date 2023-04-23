@@ -1,0 +1,21 @@
+const int leftbutton = 5;
+
+void setup() {
+  // put your setup code here, to run once:
+  //initialize pin D5 (left button) as an input
+  pinMode(leftbutton,INPUT_PULLUP);
+  pinMode(LED_BUILTIN,OUTPUT);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  int buttonvalue = digitalRead(leftbutton);
+  if (buttonvalue == HIGH) {
+    digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
+  }
+  else {
+    digitalWrite(LED_BUILTIN, LOW);  // turn the LED on (HIGH is the voltage level)
+  }
+
+}
