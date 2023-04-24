@@ -8,6 +8,12 @@
 #include <Adafruit_BMP280.h>
 #include <PDM.h>
 
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<math.h>
+#include<ctype.h>
+
 #define WHITE_LED 43
 
 Adafruit_Arcada arcada;
@@ -22,15 +28,17 @@ extern Adafruit_SPIFlash Arcada_QSPI_Flash;
 
 uint32_t buttons, last_buttons;
 uint8_t j = 0;  // neopixel counter for rainbow
-// Added:
-uint8_t i =0; // Character counter for filling the array
-uint8_t k = 1; // Assistant Character counter to tell when to print to the next line
-uint8_t x = 1; // Character counter for typing on the screen
-char Morse[200];
-uint8_t characters[sizeof(Morse)] = {0};
 
-int lastState = 0;  // the previous state from the input pin
-int currentState = 0;     // the current reading from the input pin
+// Added:
+
+uint8_t x = 1; // Character counter for typing on the screen
+uint8_t i = 0;
+uint8_t k = 0;
+
+int right;
+int left;
+char* MtoE(char* segment,char* output);
+char morseText[200];//3920
 
 uint32_t pressStartTime = 0;
 uint32_t pressStopTime = 0;
@@ -93,46 +101,90 @@ void setup() {
   buttons = last_buttons = 0;
   arcada.timerCallback(1000, timercallback);
   arcada.display->setTextWrap(false);
+
 }
 
 
 void loop() {
   arcada.display->setTextColor(ARCADA_WHITE, ARCADA_BLACK);
   arcada.display->setCursor(0, 50);
-  
-  //arcada.display->print("Testing");
-  //arcada.display->println("         ");
 
-// Need to make a string, and the print the entire string to the screen. Can append the string as the button inputs are made
-// Need to get rid of x and y?
-  //uint8_t pressed_buttons = arcada.readButtons();
   uint8_t pressed_buttons = arcada.readButtons();
-    // If the left button was pressed
-    // This one is for the space
-
+ 
   if (pressed_buttons & ARCADA_BUTTONMASK_A) {
     pressStartTime = millis();
     while ((pressed_buttons & ARCADA_BUTTONMASK_A))
       pressed_buttons = arcada.readButtons();
     pressStopTime = millis();
     holdTime = pressStopTime - pressStartTime;
+
+    if (holdTime > 150) {
+      // Save a - to the string
+      strcat (morseText,"-");
+      //arcada.display->print("-");
+      //arcada.display->setCursor(x,100);
+      i++;
+      delay(25);
+    }
+    else {
+      // Save a . to the string
+      strcat (morseText,".");
+      //arcada.display->print(".");
+      //arcada.display->setCursor(x,100);
+      i++;
+      delay(25);
+    }
   }
-  if (holdTime > 150) {
-    // Save a - to the string
-    arcada.display->print("-");
-    arcada.display->setCursor(x,100);
-  }
-  else{
-    // Save a . to the string
-    arcada.display->print(".");
-    arcada.display->setCursor(x,100);
-  }
-  x++;
   
   if (pressed_buttons & ARCADA_BUTTONMASK_B) {
     // Save a space to the string
-    arcada.display->print(" ")
+    strcat (morseText," ");
+    //arcada.display->print(" ")
+    i++;
+    delay(100);
   }
+
+for (x=0;x<i;x++){
+  arcada.display->print(morseText[x]);
+  if (x==(k*20)-1){
+    arcada.display->println("     ");
+    k++;
+  }
+}
+k=1;
+
+// Need to gather the full text and store it as a string
+
+
+
+
+/*
+      // Added for MtoE
+        //printf("Input your text (please use Latin characters with no diacritics and numbers only) \n");
+        //fgets(morseText, 3920, stdin);
+        int length = strlen(morseText);
+        morseText[length+1] = 0;
+        char latinText[280];
+        left = 0;
+        for (i = 0; i < length; i++) {
+            if (morseText[i+1] == ' ' && morseText[i+2] == ' ') {
+            //if (morseText[i+1] == '\0') {
+                right = i;
+                char segment[right-left+1];
+                printf("left = %d, right = %d, length of morseText = %d\n", left, right, length);
+                strncpy(segment, morseText + left, right - left);
+                segment[strlen(segment)] = '\0';
+                printf("%s\n",segment);
+                char* segmen = segment;
+                MtoE(segmen, latinText);
+                left = right + 3;
+            }
+        }
+        printf("The Latin text as written is: %s \n",latinText);
+
+
+
+*/
 
     last_buttons = buttons;
 
