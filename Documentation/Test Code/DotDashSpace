@@ -40,9 +40,9 @@ int left;
 char* MtoE(char* segment,char* output);
 char morseText[3920];
 
-uint32_t pressStartTime = 0;
-uint32_t pressStopTime = 0;
-uint32_t holdTime = 0;
+uint32_t l_pressStartTime,r_pressStartTime = 0;
+uint32_t l_pressStopTime,r_pressStopTime = 0;
+uint32_t l_holdTime,r_holdTime = 0;
 
 // Check the timer callback, this function is called every millisecond!
 volatile uint16_t milliseconds = 0;
@@ -112,53 +112,49 @@ void loop() {
   uint8_t pressed_buttons = arcada.readButtons();
  
   if (pressed_buttons & ARCADA_BUTTONMASK_A) {
-    pressStartTime = millis();
+      l_pressStartTime = millis();
     while ((pressed_buttons & ARCADA_BUTTONMASK_A))
       pressed_buttons = arcada.readButtons();
 
-    pressStopTime = millis();
-    holdTime = pressStopTime - pressStartTime;
+    l_pressStopTime = millis();
+    l_holdTime = l_pressStopTime - l_pressStartTime;
 
     if (holdTime > 150) {
       // Save a - to the string
       strcat (morseText,"-");
       i++;
-      delay(25);
     }
     else {
       // Save a . to the string
       strcat (morseText,".");
       i++;
-      delay(25);
     }
   }
   
   if (pressed_buttons & ARCADA_BUTTONMASK_B) {
     // Save a space to the string
-        pressStartTime = millis();
+        rpressStartTime = millis();
     while ((pressed_buttons & ARCADA_BUTTONMASK_B))
       pressed_buttons = arcada.readButtons();
 
-    pressStopTime = millis();
-    holdTime = pressStopTime - pressStartTime;
+    r_pressStopTime = millis();
+    r_holdTime = r_pressStopTime - r_pressStartTime;
 
     if (holdTime > 150) {
       // Save a - to the string
       strcat (morseText,"  ");
       i++;
-      delay(25);
     }
     else {
       // Save a . to the string
       strcat (morseText," ");
       i++;
-      delay(25);
     }
 
   }
 
 // Test code for printing the input 
-
+/*
 for (x=0;x<i;x++){
   arcada.display->print(morseText[x]);
   if (x==(k*20)-1){
@@ -167,7 +163,7 @@ for (x=0;x<i;x++){
   }
 }
 k=1;
-
+*/
 
 
 // Need to gather the full text and store it as a string
