@@ -38,7 +38,7 @@ uint8_t k = 0;
 int right;
 int left;
 char* MtoE(char* segment,char* output);
-char morseText[200];//3920
+char morseText[3920];
 
 uint32_t pressStartTime = 0;
 uint32_t pressStopTime = 0;
@@ -115,22 +115,19 @@ void loop() {
     pressStartTime = millis();
     while ((pressed_buttons & ARCADA_BUTTONMASK_A))
       pressed_buttons = arcada.readButtons();
+
     pressStopTime = millis();
     holdTime = pressStopTime - pressStartTime;
 
     if (holdTime > 150) {
       // Save a - to the string
       strcat (morseText,"-");
-      //arcada.display->print("-");
-      //arcada.display->setCursor(x,100);
       i++;
       delay(25);
     }
     else {
       // Save a . to the string
       strcat (morseText,".");
-      //arcada.display->print(".");
-      //arcada.display->setCursor(x,100);
       i++;
       delay(25);
     }
@@ -138,11 +135,29 @@ void loop() {
   
   if (pressed_buttons & ARCADA_BUTTONMASK_B) {
     // Save a space to the string
-    strcat (morseText," ");
-    //arcada.display->print(" ")
-    i++;
-    delay(100);
+        pressStartTime = millis();
+    while ((pressed_buttons & ARCADA_BUTTONMASK_B))
+      pressed_buttons = arcada.readButtons();
+
+    pressStopTime = millis();
+    holdTime = pressStopTime - pressStartTime;
+
+    if (holdTime > 150) {
+      // Save a - to the string
+      strcat (morseText,"  ");
+      i++;
+      delay(25);
+    }
+    else {
+      // Save a . to the string
+      strcat (morseText," ");
+      i++;
+      delay(25);
+    }
+
   }
+
+// Test code for printing the input 
 
 for (x=0;x<i;x++){
   arcada.display->print(morseText[x]);
@@ -153,12 +168,13 @@ for (x=0;x<i;x++){
 }
 k=1;
 
+
+
 // Need to gather the full text and store it as a string
 
 
-
-
 /*
+
       // Added for MtoE
         //printf("Input your text (please use Latin characters with no diacritics and numbers only) \n");
         //fgets(morseText, 3920, stdin);
@@ -182,10 +198,7 @@ k=1;
         }
         printf("The Latin text as written is: %s \n",latinText);
 
-
-
 */
-
     last_buttons = buttons;
 
 }
@@ -207,6 +220,20 @@ uint32_t Wheel(byte WheelPos) {
 
 
 /*****************************************************************/
+// Added 
+char* MtoE(char* segment,char* output) {
+    printf("hello\n");
+    if (strcmp(segment,".-") == 1) {
+        strcat(output,"a");
+        printf("DBG: 1\n");
+    }
+    else if (segment = "-...") {
+        printf("DBG: 2\n");
+        strcat(output,"b");
+    }
+  return output;
+}
+
 
 int16_t minwave, maxwave;
 short sampleBuffer[256];// buffer to read samples into, each sample is 16-bits
