@@ -6,12 +6,13 @@ char* EtoM(char c,char* morse);
 
 int main() {
     char latinText[2000];
+    printf("type sentense you wanna translate:\n");
     fgets(latinText, 2000, stdin);
     int length = strlen(latinText);
     latinText[length-1] = 0;
     char morse[15000] = "";
     for (int i = 0; i < length; i++) {
-        tomorse(latinText[i],morse);
+        EtoM(latinText[i],morse);
     }
     printf("The AMC as written is: \n %s",morse);
     return 0;
