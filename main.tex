@@ -41,55 +41,55 @@
 }
 
 \lstdefinestyle{customc}{
-  belowcaptionskip=1\baselineskip,
-  breaklines=true,
-  frame=L,
-  xleftmargin=\parindent,
-  language=C,
-  showstringspaces=false,
-  basicstyle=\footnotesize\ttfamily,
-  keywordstyle=\bfseries\color{green!40!black},
-  commentstyle=\itshape\color{purple!40!black},
-  identifierstyle=\color{blue},
-  stringstyle=\color{orange},
- }
+	belowcaptionskip=1\baselineskip,
+	breaklines=true,
+	frame=L,
+	xleftmargin=\parindent,
+	language=C,
+	showstringspaces=false,
+	basicstyle=\footnotesize\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{blue},
+	stringstyle=\color{orange},
+}
 
- \lstset{ %
-  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
-  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
-  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
-  breaklines=true,                 % sets automatic line breaking
-  captionpos=b,                    % sets the caption-position to bottom
-  commentstyle=\color{commentsColor}\textit,    % comment style
-  deletekeywords={...},            % if you want to delete keywords from the given language
-  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
-  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
-  frame=tb,	                   	   % adds a frame around the code
-  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
-  keywordstyle=\color{keywordsColor}\bfseries,       % keyword style
-  language=Python,                 % the language of the code (can be overrided per snippet)
-  otherkeywords={*,...},           % if you want to add more keywords to the set
-  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
-  numbersep=8pt,                   % how far the line-numbers are from the code
-  numberstyle=\tiny\color{commentsColor}, % the style that is used for the line-numbers
-  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
-  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
-  showstringspaces=false,          % underline spaces within strings only
-  showtabs=false,                  % show tabs within strings adding particular underscores
-  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
-  stringstyle=\color{stringColor}, % string literal style
-  tabsize=2,	                   % sets default tabsize to 2 spaces
-  title=\lstname,                  % show the filename of files included with \lstinputlisting; also try caption instead of title
-  columns=fixed                    % Using fixed column width (for e.g. nice alignment)
+\lstset{ %
+	backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+	basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+	breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+	breaklines=true,                 % sets automatic line breaking
+	captionpos=b,                    % sets the caption-position to bottom
+	commentstyle=\color{commentsColor}\textit,    % comment style
+	deletekeywords={...},            % if you want to delete keywords from the given language
+	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+	extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+	frame=tb,	                   	   % adds a frame around the code
+	keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+	keywordstyle=\color{keywordsColor}\bfseries,       % keyword style
+	language=Python,                 % the language of the code (can be overrided per snippet)
+	otherkeywords={*,...},           % if you want to add more keywords to the set
+	numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+	numbersep=8pt,                   % how far the line-numbers are from the code
+	numberstyle=\tiny\color{commentsColor}, % the style that is used for the line-numbers
+	rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+	showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+	showstringspaces=false,          % underline spaces within strings only
+	showtabs=false,                  % show tabs within strings adding particular underscores
+	stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+	stringstyle=\color{stringColor}, % string literal style
+	tabsize=2,	                   % sets default tabsize to 2 spaces
+	title=\lstname,                  % show the filename of files included with \lstinputlisting; also try caption instead of title
+	columns=fixed                    % Using fixed column width (for e.g. nice alignment)
 }
 
 \lstdefinestyle{customasm}{
-  belowcaptionskip=1\baselineskip,
-  frame=L,
-  xleftmargin=\parindent,
-  language=[x86masm]Assembler,
-  basicstyle=\footnotesize\ttfamily,
-  commentstyle=\itshape\color{purple!40!black},
+	belowcaptionskip=1\baselineskip,
+	frame=L,
+	xleftmargin=\parindent,
+	language=[x86masm]Assembler,
+	basicstyle=\footnotesize\ttfamily,
+	commentstyle=\itshape\color{purple!40!black},
 }
 
 \lstset{escapechar=@,style=customc}
@@ -105,141 +105,313 @@
 %\rhead{\theauthor}
 %\lhead{\thetitle}
 %\cfoot{\thepage}
-
-\begin{document}
-\title{Project Proposal}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{titlepage}
-	\centering
-    \vspace*{0.5 cm}
-    \includegraphics[scale = 0.11]{isu_seal.png}\\[1.0 cm]	% University Logo
-    \textsc{\LARGE IOWA STATE UNIVERSITY}\\[2.0 cm]
-    \textsc{\large AEROSPACE ENGINEERING DEPARTMENT}\\[0.2 cm]
-    \textsc{\large Computational Techniques for Aerospace Design}\\[0.2 cm]
-	\textsc{\Large AERE 361}\\[0.5 cm]				% Course Code
-	\textsc{\Large Project Proposal}\\[0.2 cm]
-	\textsc{\Large TEAM NAME HERE}\\[0.2 cm]
-	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
-	%{ \huge \bfseries \thetitle}\\
-	
-	
-	\begin{minipage}{0.8\textwidth}
-		
-			\begin{flushleft} 
-			\emph{Team Member Names :} \\
-			Last Name, First Name\linebreak
-			Last Name, First Name\linebreak
-			Last Name, First Name\linebreak
-			Last Name, First Name\linebreak
-			Last Name, First Name\linebreak
-			Last Name, First Name\linebreak
-			
-		\end{flushleft}
-	\end{minipage}\\[2 cm]
-	
-	\vfill
-	
-\end{titlepage}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\maketitle
-\tableofcontents
-\pagebreak
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{ABSTRACT}
-The abstract is a summary of your proposal. In general, your abstract should have enough information so that if I was to copy and paste your abstract into a web site, people would get the general idea of what your proposal is about. It should not go into any heavy detail, just the basics of what your project is about. The who, the what, and the why. You should keep your abstract to 200-400 words. Use this to ``hook in'' your reader.
-
-\section{INTRODUCTION}
-While the abstract and introduction may seem like it is similar, remember that your abstract should have enough information to stand on its own. The introduction is really the actual start to your proposal. Here you should introduce the project, the people involved and give a short introduction to the why you are doing this. This should be 1-3 paragraphs.
-
-\section{FEATURES}
-Your Features section must include a listing of at least three key features that makes your project unique. Each item needs to be backed up with a description of what it will do and why. A listing of just three items is not enough, you need to describe what those features are and why your group feels they are needed. For that reason your features should have a paragraph for each key item that describes what that key feature is. A key feature should be something that is significant to your project. For example, a key feature an autopilot system is the ability to be able to set an altitude and the autopilot will automatically set the airspeed. That is a significant feature that has a large impact on that system.
-
-
-% Below is an example of inserting an image.  Not that LaTex
-% will determine the best location for the image.  Make sure
-% you replace this image with yours and place a proper caption.
-% You can use the \label{name} to name the figure and then reference
-% it from your writeup and LaTeX will automatically give it the correct
-% number. 
-\begin{figure}[!t]
-\centering
-\includegraphics[width=4.5in]{cpx01.jpg}
-\caption{This is the Circuit Playground Express}
-\label{fig:cpx}
-\end{figure}
-
-\section{PROBLEM STATEMENT}
-Here you will go into more detail on what problem you hope to solve or address.  You should discuss what the problem is and why it is important to solve it. In this section, you need to be clear on what the problem is, so do not think of this as a ``light'' section. It helps to define your project.
-
-Your team needs to do some research into the problem at hand. Becuase of that, you should have around two to three references that you are pulling from. There are lots of places you can find references from including the ISU library and Google Scholar. I would also suggest looking at Adafruit's website, as you may find inspiration or looking to improve something already there. Remember to cite your sources though. If you find something online, that can often be citation.
-
-When you create your ``ref.bib'' file, don't forget to follow the standards for a BiBTex file. Certain things like webistes requires certain keywords for it to render properly. There are lots of sources online to help with this and many places like the ISU Library and Google Scholar can also generate text that is compatible with a BiBTex file. Once you have your Bib file ready, don't forget to cite your citations in your proposal like this \cite{einstein} or this \cite{dirac}.
-
-\section{PROBLEM SOLUTION}
-Here go over your approach to your solution and what your solution is. You must include at least one image that shows your concept. This image can be a sketch or drawing or some pictures that show your concept. Make sure you reference the image(s) like this - Figure \ref{fig:cpx}. Finally, make sure you replace the stock image I included. You should also reference any sources you had from your problem statement as well.
-
-You must also include a table that lists all the parts that you wish to have. As announced in class, you will have the parts listed in Table \ref{table:parts_list}. We have plenty of two additional parts. Those are a conductive adhesive strip and a neopixel strip. I do have some other parts, such as arcade buttons and some additional sensors. You can certainly ask for something, and I will see what I can do. Change the table below to reflect the parts you are requesting.
-
-\begin{table}[ht]
-  \caption{Parts available for teams}
-  \label{table:parts_list}
-  \begin{center}
-  \begin{tabular}{|p{3in}|c|}
-  
-  \hline
-  Part description & Qty\\
-  \hline
-  \hline
-  Adafruit Circuit Playground Express & 1 \\
-  \hline
-  AAA Battery Holder & 1 \\
-  \hline
-  USB Cable & 1 \\
-  \hline
-  \end{tabular}
-  \end{center}
-  \end{table}
-
-Finally, you can also include any pseudo code or any code snippets you have gathered so far.  This is not required, but if you found some starter code or came up with some ideas for the code, put it here. If you want to embed code into \LaTeX, you can use the example below on how to do this in \LaTeX.
-
-\begin{lstlisting}[language=Arduino]
-#include <Adafruit_CircuitPlayground.h>
-
-void setup() {
-  CircuitPlayground.begin();
-}
-
-void loop() {
-  CircuitPlayground.clearPixels();
-
-  delay(500);
-
-  CircuitPlayground.setPixelColor(0, 255,   0,   0);
-  CircuitPlayground.setPixelColor(1, 128, 128,   0);
-  CircuitPlayground.setPixelColor(2,   0, 255,   0);
-  CircuitPlayground.setPixelColor(3,   0, 128, 128);
-  CircuitPlayground.setPixelColor(4,   0,   0, 255);
-  
-  CircuitPlayground.setPixelColor(5, 0xFF0000);
-  CircuitPlayground.setPixelColor(6, 0x808000);
-  CircuitPlayground.setPixelColor(7, 0x00FF00);
-  CircuitPlayground.setPixelColor(8, 0x008080);
-  CircuitPlayground.setPixelColor(9, 0x0000FF);
- 
-  delay(5000);
-}
-\end{lstlisting}
-
-\section{CONCLUSION}
-Finally, wrap up your proposal. This only needs to be one or two paragraphs, but it should conclude with what you plan to do and the why and how. Yes, this may seem repetitive, but that is intentional. Do not forget to update your references as those will appear below in a seperate page.
-
-\newpage
-%\section{References}
-\printbibliography[heading=subbibintoc]
 %\bibliographystyle{plain}
 %\bibliography{ref}
-
+\begin{document}
+	\title{Project Proposal}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	\begin{titlepage}
+		\centering
+		\vspace*{0.5 cm}
+		\includegraphics[scale = 0.11]{isu_seal.png}\\[1.0 cm]	% University Logo
+		\textsc{\LARGE IOWA STATE UNIVERSITY}\\[2.0 cm]
+		\textsc{\large AEROSPACE ENGINEERING DEPARTMENT}\\[0.2 cm]
+		\textsc{\large Computational Techniques for Aerospace Design}\\[0.2 cm]
+		\textsc{\Large AERE 361}\\[0.5 cm]				% Course Code
+		\textsc{\Large Project Proposal}\\[0.2 cm]
+		\textsc{\Large MCAS}\\[0.2 cm]
+		\rule{\linewidth}{0.2 mm} \\[0.4 cm]
+		%{ \huge \bfseries \thetitle}\\
+		
+		
+		\begin{minipage}{0.8\textwidth}
+			
+			\begin{flushleft} 
+				\emph{Team Member Names :} \\
+				Kluch, Evan\linebreak
+				Oda, Natsuki\linebreak
+				Rasmussen, Eric\linebreak
+				Schmidt, Ethan\linebreak
+				Weber, Burke\linebreak
+				
+			\end{flushleft}
+		\end{minipage}\\[2 cm]
+		
+		\vfill
+		
+	\end{titlepage}
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%\maketitle
+	\tableofcontents
+	\pagebreak
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	\section{ABSTRACT}
+	The use of Morse code has declined with the invention of better, faster, and more reliable forms of communication. However, Morse code has and will likely continue to be a critical form of communication for those in need. Morse code is also very similar to Binary code, the fundamental communication system for all computers as both use only two characters. We will be creating an American Morse Code-English translator that can translate to and from each language. This tool will be incredibly useful for students hoping to increase their ability to understand and communicate using Morse code.
+	
+	\section{INTRODUCTION}
+	Morse code changed communication forever. Development started in the early 19th century when scientists started testing electronic signal communications. The earliest systems would transfer small electrical pulses and could be received quickly from a distance away. With this invention a new pulse language was developed. This was morse code. 
+	
+	Morse code is a system of dots, dashes, and pauses that allows people to communicate through small pulses. Each character has a set series like for example the letter “s” consists of three dots or the letter “a” is transmitted by sending one dot and one dash. This communication technique became extremely useful throughout the world wars as it allowed operators to communicate with troops on the ground. Morse code is also closely related to binary code, which is the backbone of all computers and embedded systems. Both systems use a two-character communication made up of dots and dashes for Morse code, and 0’s and 1’s for Morse code.
+	
+	Within military functions, morse code has been replaced with more advanced techniques however it is still used by some people who have suffered from a stroke and are unable to communicate in other forms. In this project we will be creating an American Morse Code (AMC) translator.
+	
+	
+	\section{FEATURES}
+	The AMC translator we will create will have two main functions. The first function is translating from English to AMC, and the second is translating from AMC to English. 
+	
+	For the AMC-to-English translator, the user will input the AMC into the program using the button on the control board. The program will take this input and translate it into English, then present the translated text onto a digital display.
+	
+	For the English-to-AMC translation, there will be two options for the user, but both will have the same main function. The user will input text via an external source, like a keyboard, and the text will display on the screen. Then, the program will translate the text into AMC and output the result using either one of the LED lights or the speaker. The user will have the option to choose which output source.
+	
+	
+	
+	% Below is an example of inserting an image.  Not that LaTex
+	% will determine the best location for the image.  Make sure
+	% you replace this image with yours and place a proper caption.
+	% You can use the \label{name} to name the figure and then reference
+	% it from your writeup and LaTeX will automatically give it the correct
+	% number. 
+	\begin{figure}[!t]
+		\centering
+		\includegraphics[width=4.5in]{telegraph.png}
+		\caption{Telegraph Key from 1844}
+		\label{fig:cpx}
+	\end{figure}
+	
+	\section{PROBLEM STATEMENT}
+	Morse code was the first way of long-distance communication. Samuel Morse created it alongside the electrical telegraph, which it works hand in hand with. The creation of Morse Code was a pivotal moment in history, because it led to the development of modern communication. Although not as prevalent as it once was, the use of Morse code today is still critical to many. In addition to recreational use in ham radios, its more critical role is in emergency communication signals and helping disabled individuals communicate more easily.
+	
+	Let’s dig a little deeper into its emergency use. Everyone knows the term “SOS”, even if the full name of it isn’t familiar. SOS is the universal sign of distress that is used when situations go awry. Your boat could have run out of gas on the ocean, or you could have lost your path while hiking trails. People use SOS internationally when they find themselves in these unfortunate situations. It quite literally means “Save Our Souls”. This is why Morse code is still important to this day. Knowing how to signal to potential passersby that you need help is a vital tool that is never really thought about until you actually need it.
+	
+	Morse code can be life saving in critical situations, but it also can help people in their daily lives. Individuals that have medical disabilities or impairments have found the use of Morse code very helpful as a means of communication. For example, someone who is blind-deaf can translate a message in Morse code through the use of a device that produces small vibrations. This allows them to feel each “dit” and “dah” that make up the message. In another case, someone who has a speech impairment and does not have the ability to use sign language can use Morse code as their primary mode of communication. It is very clear that Morse code has a place in our modern world, even though the aforementioned cases represent a small minority.
+	
+	Based on the significance of Morse code’s uses, we believe that the language should be adopted by more people. If the skill of reading it, comprehending it, and responding coherently is more widespread across the globe, its usefulness will be exploited on a more frequent occasion. Its capability to save someone’s life when they find themselves in a sticky situation makes it a useful tool to have in your back pocket. It’s also something that advantages individuals with disabilities or impairments. They appreciate its capability and enabling potential, even though most others find Morse code useful infrequently.
+	
+	The problem we are solving with this project is to spread the language of Morse code and bring awareness to its importance. We believe that teaching people about its capabilities and how to use and interpret it will help us spread its benefits to more people. The primary purpose of our project is to develop a tool that will help us teach more people how to use Morse code.
+	
+	\section{PROBLEM SOLUTION}
+	  We will be creating a translator that can take in a user input and translate it between American Morse Code and English. 
+	 To accomplish this, we will be using the Adafruit Clue board. On the board, we will utilize the LED, the speaker, the user buttons and the digital display, as well as an external Bluetooth keyboard. The combination of these I/O devices will make up our user interface. We chose the Clue board because it already comes with a digital display and still allows us to connect a keyboard device.
+	 
+	 To translate from English to AMC, the user will input English text via a keyboard connected to the control board that will be read in by the board. The program on the board will then take this text and translate each word and character into AMC. The translated AMC will be outputted using either the speaker or the LED, the user will have the option to select which output using the control buttons following a prompt on the screen.
+	 
+	 To translate from AMC to English, the user will input the AMC as a series of dots and dashes using one of the buttons on the board. The program on the control board will recognize the AMC being inputted and will distinguish between characters and words based on the time interval in between each input. The program will translate each character to make words and combine the words created to make phrases. Once translated, the English text will be outputted onto the digital display for the user to read. 
+	 
+	 We expect the English-to-AMC translation to be more accurate than the AMC-to-English translation as users inputting AMC will likely have inconsistent pause times. This is another problem that we will attempt to solve in our project. We may make use of two buttons on the control board for the inexperienced user to use. One button could be a dot while the other a dash, or one button could be a dot and a dash and the other button would represent jumping to the next character or to the next word. This will be something to experiment with as we progress in this project.
+	 
+	\begin{table}[ht]
+		\caption{Parts available for teams}
+		\label{table:parts_list}
+		\begin{center}
+			\begin{tabular}{|p{3in}|c|}
+				
+				\hline
+				Part description & Qty\\
+				\hline
+				\hline
+				Adafruit Clue & 1 \\
+				\hline
+				Bluetooth Keyboard & 1 \\
+				\hline
+			\end{tabular}
+		\end{center}
+	\end{table}
+	
+	An example of the English text to AMC text translator is shown below:
+	
+	\begin{lstlisting}[language=Arduino]
+		#include<stdio.h>
+		#include<stdlib.h>
+		#include<string.h>
+		#include<math.h>
+		char* tomorse(char c,char* output);
+		
+		int main() {
+			char input[2000];
+			printf("Input your text (please use Latin characters with no diacritics and numbers only) \n");
+			fgets(input, 2000, stdin);
+			int length = strlen(input);
+			input[length-1] = 0;
+			char output[15000] = "";
+			for (int i = 0; i < length; i++) {
+				tomorse(input[i],output);
+			}
+			printf("The AMC as written is: \n %s",output);
+			return 0;
+		}
+		
+		char* tomorse(char c,char* output) {
+			if (c == 'A' || c == 'a') {
+				strcat(output,".-   ");
+			}
+			else if (c == 'B' || c == 'b') {
+				strcat(output,"-...   ");
+			}
+			else if (c == 'C' || c == 'c') {
+				strcat(output,".. .   ");
+			}
+			else if (c == 'D' || c == 'd') {
+				strcat(output,"-..   ");
+			}
+			else if (c == 'E' || c == 'e') {
+				strcat(output,".   ");
+			}
+			else if (c == 'F' || c == 'f') {
+				strcat(output,".-.   ");
+			}
+			else if (c == 'G' || c == 'g') {
+				strcat(output,"--.   ");
+			}
+			else if (c == 'H' || c == 'h') {
+				strcat(output,"....   ");
+			}
+			else if (c == 'I' || c == 'i') {
+				strcat(output,"..   ");
+			}
+			else if (c == 'J' || c == 'j') {
+				strcat(output,"-.-.   ");
+			}
+			else if (c == 'K' || c == 'k') {
+				strcat(output,"-.-   ");
+			}
+			else if (c == 'L' || c == 'l') {
+				strcat(output,"---   ");
+			}
+			else if (c == 'M' || c == 'm') {
+				strcat(output,"--   ");
+			}
+			else if (c == 'N' || c == 'n') {
+				strcat(output,"-.   ");
+			}
+			else if (c == 'O' || c == 'o') {
+				strcat(output,". .   ");
+			}
+			else if (c == 'P' || c == 'p') {
+				strcat(output,".....   ");
+			}
+			else if (c == 'Q' || c == 'q') {
+				strcat(output,"..-.   ");
+			}
+			else if (c == 'R' || c == 'r') {
+				strcat(output,". ..   ");
+			}
+			else if (c == 'S' || c == 's') {
+				strcat(output,"...   ");
+			}
+			else if (c == 'T' || c == 't') {
+				strcat(output,"-   ");
+			}
+			else if (c == 'U' || c == 'u') {
+				strcat(output,"..-   ");
+			}
+			else if (c == 'V' || c == 'v') {
+				strcat(output,"...-   ");
+			}
+			else if (c == 'W' || c == 'w') {
+				strcat(output,".--   ");
+			}
+			else if (c == 'X' || c == 'x') {
+				strcat(output,".-..   ");
+			}
+			else if (c == 'Y' || c == 'y') {
+				strcat(output,".. ..   ");
+			}
+			else if (c == 'Z' || c == 'z') {
+				strcat(output,"... .   ");
+			}
+			else if (c == '0') {
+				strcat(output,"----   ");
+			}
+			else if (c == '1') {
+				strcat(output,".--.   ");
+			}
+			else if (c == '2') {
+				strcat(output,"..-..   ");
+			}
+			else if (c == '3') {
+				strcat(output,"...-.   ");
+			}
+			else if (c == '4') {
+				strcat(output,"....-   ");
+			}
+			else if (c == '5') {
+				strcat(output,"---   ");
+			}
+			else if (c == '6') {
+				strcat(output,"......   ");
+			}
+			else if (c == '7') {
+				strcat(output,"--..   ");
+			}
+			else if (c == '8') {
+				strcat(output,"-....   ");
+			}
+			else if (c == '9') {
+				strcat(output,"-..-   ");
+			}
+			else if (c == '.') {
+				strcat(output,"..--..   ");
+			}
+			else if (c == ',') {
+				strcat(output,".-.-   ");
+			}
+			else if (c == ':') {
+				strcat(output,"-.- . .   ");
+			}
+			else if (c == '?') {
+				strcat(output,"-..-.   ");
+			}
+			else if (c == '\'') {
+				strcat(output,"..-. .-..   ");
+			}
+			else if (c == '-') {
+				strcat(output,"... .-..   ");
+			}
+			else if (c == '/') {
+				strcat(output,"..- -   ");
+			}
+			else if (c == '(') {
+				strcat(output,"..... -.   ");
+			}
+			else if (c == ')') {
+				strcat(output,"..... .. ..   ");
+			}
+			else if (c == '"') {
+				strcat(output,"..-. -.   ");
+			}
+			else if (c == '&') {
+				strcat(output,". ...   ");
+			}
+			else if (c == '!') {
+				strcat(output,"---.   ");
+			}
+			else if (c == ';') {
+				strcat(output,"... ..   ");
+			}
+			else if (c= ' ') {
+				strcat(output,"/   ");
+			}
+			return output;
+		}
+	\end{lstlisting}
+	Note that the outputs of L and 0 have been changed for the \LaTeX compiler, the outputs in the code align with AMC standard.
+	\section{CONCLUSION}
+	There is an incredible lack of knowledge of students regarding Morse code. With the creation of the Telegraph and Morse Code in the early 19th century, people were able to communicate across long distances in very short periods of time, something that we take for granted in today’s world. With this project, we will create a Morse code translator to and from English text. We hope to help students gain knowledge of Morse code and enjoy using this embedded system to translate between Morse code and English.
+	
+	
+	\newpage
+	\section{     REFERENCES}
+	
+	Smithsonian Magazine. (2013). Telegraph used to send prototype telegraph message. smithsonianmag.com. photograph. Retrieved February 21, 2023, from https://www.smithsonianmag.com/arts-culture/how-the-telegraph-went-from-semaphore-to-communication-game-changer-1403433/. \newline
+	
+	Phillips, S. C. (2022). American Morse Code Translator. American Morse Code Translator | Morse Code World. Retrieved February 24, 2023, from https://morsecode.world/american/translator.html\#:~:text=Morse\%20to\%20Text,\%22..\%20.\%22). \newline
+	
+	Wikimedia Foundation. (2023, February 6). Morse code. Wikipedia. Retrieved February 24, 2023, from https://en.wikipedia.org/wiki/Morse\_code \newline 
+	
+	Owlcation. (2022, November 23). Is Morse code used today? the brief history and importance ... - owlcation. Is Morse Code Used Today? The Brief History and Importance of Morse Code. Retrieved February 24, 2023, from https://owlcation.com/humanities/morse\_code
+	\printbibliography
+	
 \end{document}
