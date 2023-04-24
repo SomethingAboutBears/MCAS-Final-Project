@@ -3,46 +3,41 @@
 #include<string.h>
 #include<math.h>
 #include<ctype.h>
-int right;
-int left;
-int i;
-char* MtoE(char* segment,char* output);
+
+char* MtoE(char* segment, char* output);
 
 void main() {
     char morseText[3920];
     printf("Input your text (please use Latin characters with no diacritics and numbers only) \n");
     fgets(morseText, 3920, stdin);
-    int length = strlen(morseText);
-    morseText[length+1] = 0;
     char latinText[280];
-    left = 0;
-    for (i = 0; i < length; i++) {
-        if (morseText[i+1] == ' ' && morseText[i+2] == ' ') {
-        //if (morseText[i+1] == '\0') {
-            right = i;
-            char segment[right-left+1];
-            printf("left = %d, right = %d, length of morseText = %d\n", left, right, length);
-            strncpy(segment, morseText + left, right - left);
-            segment[strlen(segment)] = '\0';
-            printf("%s\n",segment);
-            char* segmen = segment;
-            MtoE(segmen, latinText);
-            left = right + 3;
+    char *ptr;
+
+    // first trial
+    ptr = strtok(morseText,"  ");
+    printf("%s\n",ptr);
+    MtoE(ptr,latinText);
+    while(ptr != NULL) {
+        ptr = strtok(NULL,"  ");
+        if(ptr != NULL) {
+            MtoE(ptr,latinText);
+            printf("%s\n",ptr);
         }
     }
+    
     printf("The Latin text as written is: %s \n",latinText);
 }
 
+
 char* MtoE(char* segment,char* output) {
-    printf("hello\n");
-    if (strcmp(segment,".-") == 1) {
+    if (strcmp(segment,".-") == 0) {
         strcat(output,"a");
-        printf("DBG: 1\n");
     }
-    else if (segment = "-...") {
-        printf("DBG: 2\n");
+    else if (strcmp(segment,"-...") == 0) {
         strcat(output,"b");
     }
+    return output;
+}
     /*
     else if (c == 'C' || c == 'c') {
         strcat(output,".. .   ");
@@ -189,6 +184,5 @@ char* MtoE(char* segment,char* output) {
         strcat(output,"/   ");
     }
     */
-    return output;
-    }
+
 
