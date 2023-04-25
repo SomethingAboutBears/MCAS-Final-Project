@@ -1,0 +1,378 @@
+#include <Adafruit_Arcada.h>
+#include <Adafruit_SPIFlash.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_LSM6DS33.h>
+#include <Adafruit_LIS3MDL.h>
+#include <Adafruit_SHT31.h>
+#include <Adafruit_APDS9960.h>
+#include <Adafruit_BMP280.h>
+#include <PDM.h>
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<math.h>
+#include<ctype.h>
+
+#define WHITE_LED 43
+
+Adafruit_Arcada arcada;
+Adafruit_LSM6DS33 lsm6ds33;
+Adafruit_LIS3MDL lis3mdl;
+Adafruit_SHT31 sht30;
+Adafruit_APDS9960 apds9960;
+Adafruit_BMP280 bmp280;
+extern PDMClass PDM;
+extern Adafruit_FlashTransport_QSPI flashTransport;
+extern Adafruit_SPIFlash Arcada_QSPI_Flash;
+
+uint32_t buttons, last_buttons;
+uint8_t j = 0;  // neopixel counter for rainbow
+
+// Added:
+
+char* latinText; // For taking in a input from the serial
+String input;
+const int latinTextlength = 280;
+char* EtoM(char c,char* morse);
+
+
+uint8_t x = 1; // Character counter for typing on the screen
+uint8_t i = 0;
+uint8_t k = 0;
+
+int right;
+int left;
+char* MtoE(char* segment,char* output);
+char morseText[3920];
+
+uint32_t l_pressStartTime,r_pressStartTime = 0;
+uint32_t l_pressStopTime,r_pressStopTime = 0;
+uint32_t l_holdTime,r_holdTime = 0;
+
+// Check the timer callback, this function is called every millisecond!
+volatile uint16_t milliseconds = 0;
+void timercallback() {
+  analogWrite(LED_BUILTIN, milliseconds);  // pulse the LED
+  if (milliseconds == 0) {
+    milliseconds = 255;
+  } else {
+    milliseconds--;
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  // enable NFC pins  
+  if ((NRF_UICR->NFCPINS & UICR_NFCPINS_PROTECT_Msk) == (UICR_NFCPINS_PROTECT_NFC << UICR_NFCPINS_PROTECT_Pos)){
+    Serial.println("Fix NFC pins");
+    NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Wen << NVMC_CONFIG_WEN_Pos;
+    while (NRF_NVMC->READY == NVMC_READY_READY_Busy);
+    NRF_UICR->NFCPINS &= ~UICR_NFCPINS_PROTECT_Msk;
+    while (NRF_NVMC->READY == NVMC_READY_READY_Busy);
+    NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Ren << NVMC_CONFIG_WEN_Pos;
+    while (NRF_NVMC->READY == NVMC_READY_READY_Busy);
+    Serial.println("Done");
+    NVIC_SystemReset();
+  }
+  
+  pinMode(WHITE_LED, OUTPUT);
+  digitalWrite(WHITE_LED, LOW);
+
+  Serial.println("Hello! Arcada Clue test");
+  if (!arcada.arcadaBegin()) {
+    Serial.print("Failed to begin");
+    while (1);
+  }
+  arcada.displayBegin();
+  Serial.println("Arcada display begin");
+
+  for (int i=0; i<250; i+=10) {
+    arcada.setBacklight(i);
+    delay(1);
+  }
+
+  arcada.display->setCursor(0, 0);
+  arcada.display->setTextWrap(true);
+  arcada.display->setTextSize(2);
+  
+  /********** Check MIC */
+  //PDM.onReceive(onPDMdata);
+  //if (!PDM.begin(1, 16000)) {
+  //  Serial.println("**Failed to start PDM!");
+  //}
+  
+
+  buttons = last_buttons = 0;
+  arcada.timerCallback(1000, timercallback);
+  arcada.display->setTextWrap(false);
+
+}
+
+
+void loop() {
+  arcada.display->setTextColor(ARCADA_WHITE, ARCADA_BLACK);
+  arcada.display->setCursor(0, 50);
+
+  if(Serial.available()){
+    input = Serial.readStringUntil('\n');
+ 
+    Serial.println("You Typed: " + input);
+    
+  }
+  input.toCharArray(latinText,latinTextlength);
+  arcada.display->print(input);
+  /*int k = 1;
+  for (int x=0;x<latinTextlength;x++){
+    arcada.display->print(latinText[x]);
+    if (x==(k*20)-1){
+      arcada.display->println("     ");
+      k++;
+    }
+  }*/
+  
+
+// Test code for printing the input 
+/*
+for (x=0;x<i;x++){
+  arcada.display->print(morseText[x]);
+  if (x==(k*20)-1){
+    arcada.display->println("     ");
+    k++;
+  }
+}
+k=1;
+*/
+
+
+  char latinText[2000];
+      latinText[latinTextlength-1] = 0;
+      char morse[15000] = "";
+      for (int i = 0; i < latinTextlength; i++) {
+          EtoM(latinText[i],morse);
+      }
+      arcada.display->print(morse);
+      
+      //return 0;
+
+
+
+      //lastbuttons = buttons;
+  }
+
+  char* EtoM(char c,char* morse) {
+      if (c == 'A' || c == 'a') {
+          strcat(morse,".-   ");
+      }
+      else if (c == 'B' || c == 'b') {
+          strcat(morse,"-...   ");
+      }
+      else if (c == 'C' || c == 'c') {
+          strcat(morse,".. .   ");
+      }
+      else if (c == 'D' || c == 'd') {
+          strcat(morse,"-..   ");
+      }
+      else if (c == 'E' || c == 'e') {
+          strcat(morse,".   ");
+      }
+      else if (c == 'F' || c == 'f') {
+          strcat(morse,".-.   ");
+      }
+      else if (c == 'G' || c == 'g') {
+          strcat(morse,"--.   ");
+      }
+      else if (c == 'H' || c == 'h') {
+          strcat(morse,"....   ");
+      }
+      else if (c == 'I' || c == 'i') {
+          strcat(morse,"..   ");
+      }
+      else if (c == 'J' || c == 'j') {
+          strcat(morse,"-.-.   ");
+      }
+      else if (c == 'K' || c == 'k') {
+          strcat(morse,"-.-   ");
+      }
+      else if (c == 'L' || c == 'l') {
+          strcat(morse,"⸺   ");
+      }
+      else if (c == 'M' || c == 'm') {
+          strcat(morse,"--   ");
+      }
+      else if (c == 'N' || c == 'n') {
+          strcat(morse,"-.   ");
+      }
+      else if (c == 'O' || c == 'o') {
+          strcat(morse,". .   ");
+      }
+      else if (c == 'P' || c == 'p') {
+          strcat(morse,".....   ");
+      }
+      else if (c == 'Q' || c == 'q') {
+          strcat(morse,"..-.   ");
+      }
+      else if (c == 'R' || c == 'r') {
+          strcat(morse,". ..   ");
+      }
+      else if (c == 'S' || c == 's') {
+          strcat(morse,"...   ");
+      }
+      else if (c == 'T' || c == 't') {
+          strcat(morse,"-   ");
+      }
+      else if (c == 'U' || c == 'u') {
+          strcat(morse,"..-   ");
+      }
+      else if (c == 'V' || c == 'v') {
+          strcat(morse,"...-   ");
+      }
+      else if (c == 'W' || c == 'w') {
+          strcat(morse,".--   ");
+      }
+      else if (c == 'X' || c == 'x') {
+          strcat(morse,".-..   ");
+      }
+      else if (c == 'Y' || c == 'y') {
+          strcat(morse,".. ..   ");
+      }
+      else if (c == 'Z' || c == 'z') {
+          strcat(morse,"... .   ");
+      }
+      else if (c == '0') {
+          strcat(morse,"⸻   ");
+      }
+      else if (c == '1') {
+          strcat(morse,".--.   ");
+      }
+      else if (c == '2') {
+          strcat(morse,"..-..   ");
+      }
+      else if (c == '3') {
+          strcat(morse,"...-.   ");
+      }
+      else if (c == '4') {
+          strcat(morse,"....-   ");
+      }
+      else if (c == '5') {
+          strcat(morse,"---   ");
+      }
+      else if (c == '6') {
+          strcat(morse,"......   ");
+      }
+      else if (c == '7') {
+          strcat(morse,"--..   ");
+      }
+      else if (c == '8') {
+          strcat(morse,"-....   ");
+      }
+      else if (c == '9') {
+          strcat(morse,"-..-   ");
+      }
+      else if (c == '.') {
+          strcat(morse,"..--..   ");
+      }
+      else if (c == ',') {
+          strcat(morse,".-.-   ");
+      }
+      else if (c == ':') {
+          strcat(morse,"-.- . .   ");
+      }
+      else if (c == '?') {
+          strcat(morse,"-..-.   ");
+      }
+      else if (c == '\'') {
+          strcat(morse,"..-. .-..   ");
+      }
+      else if (c == '-') {
+          strcat(morse,"... .-..   ");
+      }
+      else if (c == '/') {
+          strcat(morse,"..- -   ");
+      }
+      else if (c == '(') {
+          strcat(morse,"..... -.   ");
+      }
+      else if (c == ')') {
+          strcat(morse,"..... .. ..   ");
+      }
+      else if (c == '"') {
+          strcat(morse,"..-. -.   ");
+      }
+      else if (c == '&') {
+          strcat(morse,". ...   ");
+      }
+      else if (c == '!') {
+          strcat(morse,"---.   ");
+      }
+      else if (c == ';') {
+          strcat(morse,"... ..   ");
+      }
+      else if (c= ' ') {
+          strcat(morse,"/   ");
+      }
+      return morse;
+      }
+
+
+
+
+
+
+
+
+
+// Input a value 0 to 255 to get a color value.
+// The colours are a transition r - g - b - back to r.
+uint32_t Wheel(byte WheelPos) {
+  if(WheelPos < 85) {
+   return arcada.pixels.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+  } else if(WheelPos < 170) {
+   WheelPos -= 85;
+   return arcada.pixels.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  } else {
+   WheelPos -= 170;
+   return arcada.pixels.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  }
+}
+
+
+/*****************************************************************/
+
+int16_t minwave, maxwave;
+short sampleBuffer[256];// buffer to read samples into, each sample is 16-bits
+volatile int samplesRead;// number of samples read
+
+int32_t getPDMwave(int32_t samples) {
+  minwave = 30000;
+  maxwave = -30000;
+  
+  while (samples > 0) {
+    if (!samplesRead) {
+      yield();
+      continue;
+    }
+    for (int i = 0; i < samplesRead; i++) {
+      minwave = min(sampleBuffer[i], minwave);
+      maxwave = max(sampleBuffer[i], maxwave);
+      //Serial.println(sampleBuffer[i]);
+      samples--;
+    }
+    // clear the read count
+    samplesRead = 0;
+  }
+  return maxwave-minwave;  
+}
+
+
+void onPDMdata() {
+  // query the number of bytes available
+  int bytesAvailable = PDM.available();
+
+  // read into the sample buffer
+  PDM.read(sampleBuffer, bytesAvailable);
+
+  // 16-bit, 2 bytes per sample
+  samplesRead = bytesAvailable / 2;
+}
