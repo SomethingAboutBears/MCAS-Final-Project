@@ -36,153 +36,154 @@ char* MtoE(char* segment,char* output) {
     else if (strcmp(segment,"-...") == 0) {
         strcat(output,"b");
     }
+    else if (strcmp(segment,".. .") == 0) {
+        strcat(output,"c");
+    }
+    else if (strcmp(segment,"-..") == 0) {
+        strcat(output,"dd");
+    }
+    else if (strcmp(segment,".") == 0) {
+        strcat(output,"e");
+    }
+    else if (strcmp(segment,".-.") == 0) {
+        strcat(output,"f");
+    }
+    else if (strcmp(segment,"--.") == 0) {
+        strcat(output,"g");
+    }
+    else if (strcmp(segment,"....") == 0) {
+        strcat(output,"h");
+    }
+    else if (strcmp(segment,"..") == 0) {
+        strcat(output,"i");
+    }
+    else if (strcmp(segment,"-.-.") == 0) {
+        strcat(output,"j");
+    }
+    else if (strcmp(segment,"-.-") == 0) {
+        strcat(output,"k");
+    }
+    else if (strcmp(segment,"-.-") == 0) {
+        strcat(output,"k");
+    }
+    else if (strcmp(segment,"----") == 0) {
+        strcat(output,"l");
+    }
+    else if (strcmp(segment,"--") == 0) {
+        strcat(output,"m");
+    }
+    else if (strcmp(segment,"-.") == 0) {
+        strcat(output,"n");
+    }
+    else if (strcmp(segment,". .") == 0) {
+        strcat(output,"o");
+    }
+    else if (strcmp(segment,".....") == 0) {
+        strcat(output,"p");
+    }
+    else if (strcmp(segment,"..-.") == 0) {
+        strcat(output,"q");
+    }
+    else if (strcmp(segment,". ..") == 0) {
+        strcat(output,"r");
+    }
+    else if (strcmp(segment,"...") == 0) {
+        strcat(output,"s");
+    }
+    else if (strcmp(segment,"-") == 0) {
+        strcat(output,"t");
+    }
+    else if (strcmp(segment,"..-") == 0) {
+        strcat(output,"u");
+    }
+    else if (strcmp(segment,"...-") == 0) {
+        strcat(output,"v");
+    }
+    else if (strcmp(segment,".--") == 0) {
+        strcat(output,"w");
+    }
+    else if (strcmp(segment,".-..") == 0) {
+        strcat(output,"x");
+    }
+    else if (strcmp(segment,".. ..") == 0) {
+        strcat(output,"y");
+    }
+    else if (strcmp(segment,"... .") == 0) {
+        strcat(output,"z");
+    }
+    else if (strcmp(segment,"-----") == 0) {
+        strcat(output,"0");
+    }
+    else if (strcmp(segment,".--.") == 0) {
+        strcat(output,"1");
+    }
+    else if (strcmp(segment,"..-..") == 0) {
+        strcat(output,"2");
+    }
+    else if (strcmp(segment,"-") == 0) {
+        strcat(output,"3");
+    }
+    else if (strcmp(segment,"....-") == 0) {
+        strcat(output,"4");
+    }
+    else if (strcmp(segment,"---") == 0) {
+        strcat(output,"5");
+    }
+    else if (strcmp(segment,"......") == 0) {
+        strcat(output,"6");
+    }
+    else if (strcmp(segment,"--..") == 0) {
+        strcat(output,"7");
+    }
+    else if (strcmp(segment,"-....") == 0) {
+        strcat(output,"8");
+    }
+    else if (strcmp(segment,"-..-") == 0) {
+        strcat(output,"9");
+    }
+    else if (strcmp(segment,"..--..") == 0) {
+        strcat(output,".");
+    }
+    else if (strcmp(segment,".-.-") == 0) {
+        strcat(output,",");
+    }
+    else if (strcmp(segment,"-.- . .") == 0) {
+        strcat(output,":");
+    }
+    else if (strcmp(segment,"-..-.") == 0) {
+        strcat(output,"?");
+    }
+    else if (strcmp(segment,"..-. .-..") == 0) {
+        strcat(output,"\'");
+    }
+    else if (strcmp(segment,"... .-..") == 0) {
+        strcat(output,"-");
+    }
+    else if (strcmp(segment,"..- -") == 0) {
+        strcat(output,"/");
+    }
+    else if (strcmp(segment,"..... -.") == 0) {
+        strcat(output,"(");
+    }
+    else if (strcmp(segment,"..... .. ..") == 0) {
+        strcat(output,")");
+    }
+    else if (strcmp(segment,"..-. -.") == 0) {
+        strcat(output,"\"");
+    }
+    else if (strcmp(segment,". ...") == 0) {
+        strcat(output,"&");
+    }
+    else if (strcmp(segment,"---.") == 0) {
+        strcat(output,"!");
+    }
+    else if (strcmp(segment,"... ..") == 0) {
+        strcat(output,";");
+    }
+    else if (strcmp(segment,"/") == 0) {
+        strcat(output," ");
+    }
     return output;
 }
-    /*
-    else if (c == 'C' || c == 'c') {
-        strcat(output,".. .   ");
-    }
-    else if (c == 'D' || c == 'd') {
-        strcat(output,"-..   ");
-    }
-    else if (c == 'E' || c == 'e') {
-        strcat(output,".   ");
-    }
-    else if (c == 'F' || c == 'f') {
-        strcat(output,".-.   ");
-    }
-    else if (c == 'G' || c == 'g') {
-        strcat(output,"--.   ");
-    }
-    else if (c == 'H' || c == 'h') {
-        strcat(output,"....   ");
-    }
-    else if (c == 'I' || c == 'i') {
-        strcat(output,"..   ");
-    }
-    else if (c == 'J' || c == 'j') {
-        strcat(output,"-.-.   ");
-    }
-    else if (c == 'K' || c == 'k') {
-        strcat(output,"-.-   ");
-    }
-    else if (c == 'L' || c == 'l') {
-        strcat(output,"⸺   ");
-    }
-    else if (c == 'M' || c == 'm') {
-        strcat(output,"--   ");
-    }
-    else if (c == 'N' || c == 'n') {
-        strcat(output,"-.   ");
-    }
-    else if (c == 'O' || c == 'o') {
-        strcat(output,". .   ");
-    }
-    else if (c == 'P' || c == 'p') {
-        strcat(output,".....   ");
-    }
-    else if (c == 'Q' || c == 'q') {
-        strcat(output,"..-.   ");
-    }
-    else if (c == 'R' || c == 'r') {
-        strcat(output,". ..   ");
-    }
-    else if (c == 'S' || c == 's') {
-        strcat(output,"...   ");
-    }
-    else if (c == 'T' || c == 't') {
-        strcat(output,"-   ");
-    }
-    else if (c == 'U' || c == 'u') {
-        strcat(output,"..-   ");
-    }
-    else if (c == 'V' || c == 'v') {
-        strcat(output,"...-   ");
-    }
-    else if (c == 'W' || c == 'w') {
-        strcat(output,".--   ");
-    }
-    else if (c == 'X' || c == 'x') {
-        strcat(output,".-..   ");
-    }
-    else if (c == 'Y' || c == 'y') {
-        strcat(output,".. ..   ");
-    }
-    else if (c == 'Z' || c == 'z') {
-        strcat(output,"... .   ");
-    }
-    else if (c == '0') {
-        strcat(output,"⸻   ");
-    }
-    else if (c == '1') {
-        strcat(output,".--.   ");
-    }
-    else if (c == '2') {
-        strcat(output,"..-..   ");
-    }
-    else if (c == '3') {
-        strcat(output,"...-.   ");
-    }
-    else if (c == '4') {
-        strcat(output,"....-   ");
-    }
-    else if (c == '5') {
-        strcat(output,"---   ");
-    }
-    else if (c == '6') {
-        strcat(output,"......   ");
-    }
-    else if (c == '7') {
-        strcat(output,"--..   ");
-    }
-    else if (c == '8') {
-        strcat(output,"-....   ");
-    }
-    else if (c == '9') {
-        strcat(output,"-..-   ");
-    }
-    else if (c == '.') {
-        strcat(output,"..--..   ");
-    }
-    else if (c == ',') {
-        strcat(output,".-.-   ");
-    }
-    else if (c == ':') {
-        strcat(output,"-.- . .   ");
-    }
-    else if (c == '?') {
-        strcat(output,"-..-.   ");
-    }
-    else if (c == '\'') {
-        strcat(output,"..-. .-..   ");
-    }
-    else if (c == '-') {
-        strcat(output,"... .-..   ");
-    }
-    else if (c == '/') {
-        strcat(output,"..- -   ");
-    }
-    else if (c == '(') {
-        strcat(output,"..... -.   ");
-    }
-    else if (c == ')') {
-        strcat(output,"..... .. ..   ");
-    }
-    else if (c == '"') {
-        strcat(output,"..-. -.   ");
-    }
-    else if (c == '&') {
-        strcat(output,". ...   ");
-    }
-    else if (c == '!') {
-        strcat(output,"---.   ");
-    }
-    else if (c == ';') {
-        strcat(output,"... ..   ");
-    }
-    else if (c= ' ') {
-        strcat(output,"/   ");
-    }
-    */
 
 
