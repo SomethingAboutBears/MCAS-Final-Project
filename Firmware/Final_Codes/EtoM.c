@@ -20,154 +20,154 @@ int main() {
 
 char* EtoM(char c,char* morse) {
     if (c == 'A' || c == 'a') {
-        strcat(morse,".-   ");
+        strcat(morse,".-  ");
     }
     else if (c == 'B' || c == 'b') {
-        strcat(morse,"-...   ");
+        strcat(morse,"-...  ");
     }
     else if (c == 'C' || c == 'c') {
-        strcat(morse,".. .   ");
+        strcat(morse,".. .  ");
     }
     else if (c == 'D' || c == 'd') {
-        strcat(morse,"-..   ");
+        strcat(morse,"-..  ");
     }
     else if (c == 'E' || c == 'e') {
-        strcat(morse,".   ");
+        strcat(morse,".  ");
     }
     else if (c == 'F' || c == 'f') {
-        strcat(morse,".-.   ");
+        strcat(morse,".-.  ");
     }
     else if (c == 'G' || c == 'g') {
-        strcat(morse,"--.   ");
+        strcat(morse,"--.  ");
     }
     else if (c == 'H' || c == 'h') {
-        strcat(morse,"....   ");
+        strcat(morse,"....  ");
     }
     else if (c == 'I' || c == 'i') {
-        strcat(morse,"..   ");
+        strcat(morse,"..  ");
     }
     else if (c == 'J' || c == 'j') {
-        strcat(morse,"-.-.   ");
+        strcat(morse,"-.-.  ");
     }
     else if (c == 'K' || c == 'k') {
-        strcat(morse,"-.-   ");
+        strcat(morse,"-.-  ");
     }
     else if (c == 'L' || c == 'l') {
-        strcat(morse,"⸺   ");
+        strcat(morse,"----  ");
     }
     else if (c == 'M' || c == 'm') {
-        strcat(morse,"--   ");
+        strcat(morse,"--  ");
     }
     else if (c == 'N' || c == 'n') {
-        strcat(morse,"-.   ");
+        strcat(morse,"-.  ");
     }
     else if (c == 'O' || c == 'o') {
-        strcat(morse,". .   ");
+        strcat(morse,". .  ");
     }
     else if (c == 'P' || c == 'p') {
-        strcat(morse,".....   ");
+        strcat(morse,".....  ");
     }
     else if (c == 'Q' || c == 'q') {
-        strcat(morse,"..-.   ");
+        strcat(morse,"..-.  ");
     }
     else if (c == 'R' || c == 'r') {
-        strcat(morse,". ..   ");
+        strcat(morse,". ..  ");
     }
     else if (c == 'S' || c == 's') {
-        strcat(morse,"...   ");
+        strcat(morse,"...  ");
     }
     else if (c == 'T' || c == 't') {
-        strcat(morse,"-   ");
+        strcat(morse,"-  ");
     }
     else if (c == 'U' || c == 'u') {
-        strcat(morse,"..-   ");
+        strcat(morse,"..-  ");
     }
     else if (c == 'V' || c == 'v') {
-        strcat(morse,"...-   ");
+        strcat(morse,"...-  ");
     }
     else if (c == 'W' || c == 'w') {
-        strcat(morse,".--   ");
+        strcat(morse,".--  ");
     }
     else if (c == 'X' || c == 'x') {
-        strcat(morse,".-..   ");
+        strcat(morse,".-..  ");
     }
     else if (c == 'Y' || c == 'y') {
-        strcat(morse,".. ..   ");
+        strcat(morse,".. ..  ");
     }
     else if (c == 'Z' || c == 'z') {
-        strcat(morse,"... .   ");
+        strcat(morse,"... .  ");
     }
     else if (c == '0') {
-        strcat(morse,"⸻   ");
+        strcat(morse,"-----  ");
     }
     else if (c == '1') {
-        strcat(morse,".--.   ");
+        strcat(morse,".--.  ");
     }
     else if (c == '2') {
-        strcat(morse,"..-..   ");
+        strcat(morse,"..-..  ");
     }
     else if (c == '3') {
-        strcat(morse,"...-.   ");
+        strcat(morse,"...-.  ");
     }
     else if (c == '4') {
-        strcat(morse,"....-   ");
+        strcat(morse,"....-  ");
     }
     else if (c == '5') {
-        strcat(morse,"---   ");
+        strcat(morse,"---  ");
     }
     else if (c == '6') {
-        strcat(morse,"......   ");
+        strcat(morse,"......  ");
     }
     else if (c == '7') {
-        strcat(morse,"--..   ");
+        strcat(morse,"--..  ");
     }
     else if (c == '8') {
-        strcat(morse,"-....   ");
+        strcat(morse,"-....  ");
     }
     else if (c == '9') {
-        strcat(morse,"-..-   ");
+        strcat(morse,"-..-  ");
     }
     else if (c == '.') {
-        strcat(morse,"..--..   ");
+        strcat(morse,"..--..  ");
     }
     else if (c == ',') {
-        strcat(morse,".-.-   ");
+        strcat(morse,".-.-  ");
     }
     else if (c == ':') {
-        strcat(morse,"-.- . .   ");
+        strcat(morse,"-.- . .  ");
     }
     else if (c == '?') {
-        strcat(morse,"-..-.   ");
+        strcat(morse,"-..-.  ");
     }
     else if (c == '\'') {
-        strcat(morse,"..-. .-..   ");
+        strcat(morse,"..-. .-..  ");
     }
     else if (c == '-') {
-        strcat(morse,"... .-..   ");
+        strcat(morse,"... .-..  ");
     }
     else if (c == '/') {
-        strcat(morse,"..- -   ");
+        strcat(morse,"..- -  ");
     }
     else if (c == '(') {
-        strcat(morse,"..... -.   ");
+        strcat(morse,"..... -.  ");
     }
     else if (c == ')') {
-        strcat(morse,"..... .. ..   ");
+        strcat(morse,"..... .. ..  ");
     }
     else if (c == '"') {
-        strcat(morse,"..-. -.   ");
+        strcat(morse,"..-. -.  ");
     }
     else if (c == '&') {
-        strcat(morse,". ...   ");
+        strcat(morse,". ...  ");
     }
     else if (c == '!') {
-        strcat(morse,"---.   ");
+        strcat(morse,"---.  ");
     }
     else if (c == ';') {
-        strcat(morse,"... ..   ");
+        strcat(morse,"... ..  ");
     }
     else if (c= ' ') {
-        strcat(morse,"/   ");
+        strcat(morse,"/  ");
     }
     return morse;
     }
