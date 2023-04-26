@@ -33,10 +33,17 @@ uint8_t j = 0;  // neopixel counter for rainbow
 
 // Added:
 
-char latinText[280]; // For taking in a input from the serial
+
+const byte latinTextlength = 280;
+char latinText[latinTextlength];   // an array to store the received data
+
+boolean newinput = false;
+
+
+//char latinText[280]; // For taking in a input from the serial
 uint8_t inputs = 0;
 // String input;
-const int latinTextlength = strlen(latinText);
+//const int latinTextlength = 280;
 char* EtoM(char c,char* morse);
 
 
@@ -121,30 +128,84 @@ void loop() {
   arcada.display->setTextColor(ARCADA_WHITE, ARCADA_BLACK);
   arcada.display->setCursor(0, 50);
 // Use Serial.read() to read one input character at a time. Ask for user input one character at a time
-
+/*
   if(Serial.available()){
-    inputs = 1;
-    if (inputs ==1){
-      char inputchar = Serial.read();
-      // If the character is a $ - chosen because it is S for stop
-      if (inputchar == 36){ 
-        inputs = 0;
-      }
-      latinText[i] = inputchar;
-      i++;
-      Serial.println(inputchar);
+    for (int j = 0;j<latinTextlength;j++){
+      latinText[j] = Serial.read();
     }
+    Serial.println(latinText);
   }
   int k = 1;
-  for (int x=0;x<i+1;x++){
-    arcada.display->print(latinText[x]);
-    if (x==(k*20)-1){
-      arcada.display->println("     ");
-      k++;
+    for (int x=0;x<i;x++){
+      arcada.display->print(latinText[x]);
+      if (x==(k*20)-1){
+        arcada.display->println("     ");
+        k++;
+      }
     }
-  }
+}
+*/
+    readinput();
+    showNewinput();
 }
 
+
+void readinput() {
+    static byte ndx = 0;
+    char endMarker = '\n';
+    char input;
+    
+    while (Serial.available() > 0 && newinput == false) {
+        input = Serial.read();
+
+        if (input != endMarker) {
+            latinText[ndx] = input;
+            ndx++;
+            if (ndx >= latinTextlength) {
+                ndx = latinTextlength - 1;
+            }
+        }
+        else {
+            latinText[ndx] = '\0'; // terminate the string
+            ndx = 0;
+            newinput = true;
+        }
+    }
+}
+void showNewinput() {
+    if (newinput == true) {
+        Serial.println(latinText);
+        arcada.display->print(latinText);
+        newinput = false;
+    }
+}
+  /*
+  while(inputs == 0){
+    if(Serial.available()){
+        
+      inputs = 1;
+      if (inputs ==1){
+        char inputchar = Serial.read();
+        // If the character is a $ - chosen because it is S for stop
+        if (inputchar == 36){ 
+          inputs = 0;
+        }
+        latinText[i] = inputchar;
+        i++;
+        Serial.println(inputchar);
+      }
+    }
+  }
+  
+  int k = 1;
+    for (int x=0;x<i;x++){
+      arcada.display->print(latinText[x]);
+      if (x==(k*20)-1){
+        arcada.display->println("     ");
+        k++;
+      }
+    }
+*/
   /*
   int k = 1;
   for (int x=0;x<latinTextlength;x++){
@@ -156,19 +217,6 @@ void loop() {
   }
 }
 */
-
-// Test code for printing the input 
-/*
-for (x=0;x<i;x++){
-  arcada.display->print(morseText[x]);
-  if (x==(k*20)-1){
-    arcada.display->println("     ");
-    k++;
-  }
-}
-k=1;
-*/
-
 /*
   char latinText[2000];
       latinText[latinTextlength-1] = 0;
@@ -176,6 +224,7 @@ k=1;
       for (int i = 0; i < latinTextlength; i++) {
           EtoM(latinText[i],morse);
       }
+      Serial.println(morse);
       arcada.display->print(morse);
       
       //return 0;
@@ -183,7 +232,7 @@ k=1;
 
 
       //lastbuttons = buttons;
-  }
+}
 
   char* EtoM(char c,char* morse) {
       if (c == 'A' || c == 'a') {
