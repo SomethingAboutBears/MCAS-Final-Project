@@ -33,9 +33,10 @@ uint8_t j = 0;  // neopixel counter for rainbow
 
 // Added:
 
-char* latinText; // For taking in a input from the serial
-String input;
-const int latinTextlength = 280;
+char latinText[280]; // For taking in a input from the serial
+uint8_t inputs = 0;
+// String input;
+const int latinTextlength = strlen(latinText);
 char* EtoM(char c,char* morse);
 
 
@@ -111,23 +112,41 @@ void setup() {
   arcada.timerCallback(1000, timercallback);
   arcada.display->setTextWrap(false);
 
+  Serial.println("Enter in your phrase one character at a time.");
+  Serial.println("Enter '$' to finish entering characters.");
 }
 
 
 void loop() {
   arcada.display->setTextColor(ARCADA_WHITE, ARCADA_BLACK);
   arcada.display->setCursor(0, 50);
+// Use Serial.read() to read one input character at a time. Ask for user input one character at a time
 
   if(Serial.available()){
-    input = Serial.readStringUntil('\n');
- 
-    Serial.println("You Typed: " + input);
-    
+    inputs = 1;
+    if (inputs ==1){
+      char inputchar = Serial.read();
+      // If the character is a $ - chosen because it is S for stop
+      if (inputchar == 36){ 
+        inputs = 0;
+      }
+      latinText[i] = inputchar;
+      i++;
+      Serial.println(inputchar);
+    }
   }
-  input.toCharArray(latinText,latinTextlength);
-  arcada.display->print(input);
+  int k = 1;
+  for (int x=0;x<i+1;x++){
+    arcada.display->print(latinText[x]);
+    if (x==(k*20)-1){
+      arcada.display->println("     ");
+      k++;
+    }
+  }
 }
-  /*int k = 1;
+
+  /*
+  int k = 1;
   for (int x=0;x<latinTextlength;x++){
     arcada.display->print(latinText[x]);
     if (x==(k*20)-1){
@@ -135,9 +154,8 @@ void loop() {
       k++;
     }
   }
-  
-  */
-  
+}
+*/
 
 // Test code for printing the input 
 /*
@@ -320,3 +338,4 @@ k=1;
       }
       return morse;
       }
+*/
