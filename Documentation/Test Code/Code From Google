@@ -1,0 +1,58 @@
+#include <Adafruit_Arcada.h>
+#include <Adafruit_SPIFlash.h> // For increasing flash space of board?
+#include <Adafruit_Sensor.h> // For basic sensors
+//#include <Adafruit_LSM6DS33.h> // Accelerometer and Gyroscope
+//#include <Adafruit_LIS3MDL.h> // Magnetomenter
+//#include <Adafruit_SHT31.h> // Temperature and Humidity Sensor
+//#include <Adafruit_APDS9960.h> // Proximity, Light, RGB, and Gesture Sensor
+//#include <Adafruit_BMP280.h> // Pressure and altitude sensors
+#include <PDM.h>
+#include <Adafruit_TinyUSB.h>
+#include <SoftwareSerial.h>
+// Example 2 - Receive with an end-marker
+
+const byte numChars = 32;
+char receivedChars[numChars];   // an array to store the received data
+
+boolean newData = false;
+
+void setup() {
+    Serial.begin(9600);
+    Serial.println("<Arduino is ready>");
+}
+
+void loop() {
+    recvWithEndMarker();
+    showNewData();
+}
+
+void recvWithEndMarker() {
+    static byte ndx = 0;
+    char endMarker = '\n';
+    char rc;
+    
+    while (Serial.available() > 0 && newData == false) {
+        rc = Serial.read();
+
+        if (rc != endMarker) {
+            receivedChars[ndx] = rc;
+            ndx++;
+            if (ndx >= numChars) {
+                ndx = numChars - 1;
+            }
+        }
+        else {
+            receivedChars[ndx] = '\0'; // terminate the string
+            ndx = 0;
+            newData = true;
+        }
+    }
+}
+
+void showNewData() {
+    if (newData == true) {
+        Serial.print("This just in ... ");
+        Serial.println(receivedChars);
+        newData = false;
+    }
+}
