@@ -1,10 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<math.h>
+
 char* EtoM(char c,char* morse);
 
-int main() {
+void main() {
     char latinText[2000];
     printf("type sentense you wanna translate:\n");
     fgets(latinText, 2000, stdin);
@@ -15,7 +15,6 @@ int main() {
         EtoM(latinText[i],morse);
     }
     printf("The AMC as written is: \n %s",morse);
-    return 0;
 }
 
 char* EtoM(char c,char* morse) {
@@ -170,4 +169,4 @@ char* EtoM(char c,char* morse) {
         strcat(morse,"/  ");
     }
     return morse;
-    }
+}
