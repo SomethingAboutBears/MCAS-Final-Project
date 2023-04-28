@@ -39,11 +39,11 @@ char latinText[latinTextlength];   // an array to store the received data
 boolean newinput = false;
 
 
-int E2M= 0;
+int runTranslators= 0;
 
 //char latinText[280]; // For taking in a input from the serial
 uint8_t inputs = 0;
-uint8_t takeinputs =0;
+uint8_t takeinputs = 0;
 // String input;
 //const int latinTextlength = 280;
 char* EtoM(char c,char* morse);
@@ -64,6 +64,7 @@ char morse[1500];
   uint32_t pressStopTime = 0;
   uint32_t holdTime = 0;
   uint32_t counter = 0;
+  uint32_t currenttime =0;
 
 // Check the timer callback, this function is called every millisecond!
 volatile uint16_t milliseconds = 0;
@@ -110,16 +111,16 @@ void setup() {
 
 void loop() {
 
-if (E2M == 0) {
+if (runTranslators == 0) {
  menu();
 }
 
 uint8_t pressed_buttons = arcada.readButtons();
  
     if (pressed_buttons & ARCADA_BUTTONMASK_B){ 
-        E2M = 1;
+        runTranslators = 1;
         
-        while (E2M == 1){
+        while (runTranslators == 1){
         for (int i = 0; i < 15; i++){
           arcada.display->println("                    ");
         }
@@ -135,30 +136,32 @@ uint8_t pressed_buttons = arcada.readButtons();
 
 
     if (pressed_buttons & ARCADA_BUTTONMASK_A){ 
-        E2M = 1;
+        runTranslators = 1;
         
-        while (E2M == 1){
+        while (runTranslators == 1){
         for (int i = 0; i < 15; i++){
           arcada.display->println("                    ");
         }
         arcada.display->setCursor(0, 0);
         arcada.display->println("  Morse to English  ");
-        morseinputs();
-        Serial.println("Made it out");
-        translateMtoE();
-        showNewinput();
-
-    /*
-        pressed_buttons = arcada.readButtons();
-        if (pressed_buttons){
-          takeinputs = 1;
+        takeinputs = 1;
+        int clearscreen = 1;
+        if (clearscreen == 1){
+          for (int i = 0; i < 15; i++){
+            arcada.display->println("                    ");
+          }
+          clearscreen = 0;
         }
         while (takeinputs ==1){
           morseinputs();
         }
+        //Serial.println("Made it out");
         translateMtoE();
+        Serial.println(morse);
+        Serial.println(latinText);
         showNewinput();
-      */
+        memset(morse, 0, sizeof(morse));
+
     }
 
     }
@@ -276,11 +279,11 @@ void buzzer() {
 }
 
 void morseinputs() {
-  int takeinputs = 1;
-
-  while (takeinputs == 1){
+  //Serial.println("Test line");
   uint8_t pressed_buttons = arcada.readButtons();
     if (pressed_buttons & ARCADA_BUTTONMASK_A) {
+      // It knows every time I press the buttons
+      Serial.println("Button A pressed");
       counter = millis();
       pressStartTime = millis();
       while ((pressed_buttons & ARCADA_BUTTONMASK_A)){
@@ -292,45 +295,38 @@ void morseinputs() {
       if (holdTime > 150) {
         // Save a - to the string
         strcat (morse,"-");
-        i++;
-        delay(25);
+        //delay(25);
       }
       else {
         // Save a . to the string
         strcat (morse,".");
-        i++;
-        delay(25);
+        //delay(25);
       }
     }
-    
+
     if (pressed_buttons & ARCADA_BUTTONMASK_B) {
+      Serial.println("Button B pressed");
       counter = millis();
       pressStartTime = millis();
-      while ((pressed_buttons & ARCADA_BUTTONMASK_B))
+      while ((pressed_buttons & ARCADA_BUTTONMASK_B)) {
         pressed_buttons = arcada.readButtons();
-
+      }
       pressStopTime = millis();
       holdTime = pressStopTime - pressStartTime;
       Serial.println(holdTime);
       if (holdTime > 150) {
         // Save a - to the string
         strcat (morse,"/");
-        i++;
-        delay(25);
+        //delay(25);
       }
       else {
         // Save a . to the string
         strcat (morse," ");
-        i++;
-        delay(25);
+        //delay(25);
       }
     }
-        arcada.display->setCursor(0, 30); 
-        for (int i = 0; i < 15; i++){
-          arcada.display->println("                    ");
-        }
       int k = 1;
-      arcada.display->setCursor(0, 20);
+      arcada.display->setCursor(0, 30);
       for (int x=0;x<strlen(morse);x++){
         arcada.display->print(morse[x]);
 
@@ -339,13 +335,16 @@ void morseinputs() {
         k++;
         }
       }
-        delay(10);
-    uint32_t currenttime = millis();
-    if (currenttime - counter >= 5000){
-      takeinputs = 0;
+    if (counter >0){
+      currenttime = millis();
     }
-  }
-
+    Serial.println(currenttime-counter);
+    if ((currenttime - counter) >= 5000){
+      takeinputs = 0;
+      newinput = true;
+      //Serial.println("I AM BEING CALLED TO THE HEAVENS");
+      return;
+    }
 }
 
 void translateMtoE(){
@@ -354,6 +353,7 @@ void translateMtoE(){
         // first split
     ptr = strtok(morse,",");
     //printf("the length of morse code is %lu\n",strlen(ptr));
+    //char* MtoE(char* segment,char* output)
     MtoE(ptr,latinText);
         
         // second and following split
