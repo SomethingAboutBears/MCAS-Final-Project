@@ -1,0 +1,661 @@
+#include <Adafruit_Arcada.h>
+#include <Adafruit_SPIFlash.h> // For increasing flash space of board?
+#include <Adafruit_Sensor.h> // For basic sensors
+//#include <Adafruit_LSM6DS33.h> // Accelerometer and Gyroscope
+//#include <Adafruit_LIS3MDL.h> // Magnetomenter
+//#include <Adafruit_SHT31.h> // Temperature and Humidity Sensor
+//#include <Adafruit_APDS9960.h> // Proximity, Light, RGB, and Gesture Sensor
+//#include <Adafruit_BMP280.h> // Pressure and altitude sensors
+#include <PDM.h>
+#include <Adafruit_TinyUSB.h>
+#include <SoftwareSerial.h>
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<math.h>
+#include<ctype.h>
+
+#define WHITE_LED 43
+
+Adafruit_Arcada arcada;
+// Adafruit_LSM6DS33 lsm6ds33;
+// Adafruit_LIS3MDL lis3mdl;
+// Adafruit_SHT31 sht30;
+// Adafruit_APDS9960 apds9960;
+// Adafruit_BMP280 bmp280;
+extern PDMClass PDM;
+extern Adafruit_FlashTransport_QSPI flashTransport;
+extern Adafruit_SPIFlash Arcada_QSPI_Flash;
+
+uint32_t buttons, last_buttons;
+uint8_t j = 0;  // neopixel counter for rainbow
+
+// Added:
+
+const int latinTextlength = 280;
+char latinText[latinTextlength];   // an array to store the received data
+
+boolean newinput = false;
+
+
+int E2M= 0;
+
+//char latinText[280]; // For taking in a input from the serial
+uint8_t inputs = 0;
+uint8_t takeinputs =0;
+// String input;
+//const int latinTextlength = 280;
+char* EtoM(char c,char* morse);
+
+
+uint8_t x = 1; // Character counter for typing on the screen
+uint8_t i = 0;
+uint8_t k = 0;
+
+int right;
+int left;
+char* MtoE(char* segment,char* output);
+//char morseText[3920];
+char morse[1500];
+//memset(morse, 0, sizeof(morse));
+
+  uint32_t pressStartTime = 0;
+  uint32_t pressStopTime = 0;
+  uint32_t holdTime = 0;
+  uint32_t counter = 0;
+
+// Check the timer callback, this function is called every millisecond!
+volatile uint16_t milliseconds = 0;
+void timercallback() {
+  analogWrite(LED_BUILTIN, milliseconds);  // pulse the LED
+  if (milliseconds == 0) {
+    milliseconds = 255;
+  } else {
+    milliseconds--;
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+
+
+  pinMode(WHITE_LED, OUTPUT);
+  digitalWrite(WHITE_LED, LOW);
+
+
+  arcada.displayBegin();
+  Serial.println("Arcada display begin");
+
+  for (int i=0; i<250; i+=10) {
+    arcada.setBacklight(i);
+    delay(1);
+  }
+
+  arcada.display->setCursor(0, 0);
+  arcada.display->setTextWrap(true);
+  arcada.display->setTextSize(2);
+  
+  
+  
+
+  buttons = last_buttons = 0;
+  arcada.timerCallback(1000, timercallback);
+  arcada.display->setTextWrap(false);
+
+  Serial.println("Enter in your phrase one character at a time.");
+  Serial.println("Enter '$' to finish entering characters.");
+}
+
+
+void loop() {
+
+if (E2M == 0) {
+ menu();
+}
+
+uint8_t pressed_buttons = arcada.readButtons();
+ 
+    if (pressed_buttons & ARCADA_BUTTONMASK_B){ 
+        E2M = 1;
+        
+        while (E2M == 1){
+        for (int i = 0; i < 15; i++){
+          arcada.display->println("                    ");
+        }
+        arcada.display->setCursor(0, 0);
+        arcada.display->println("  English to Morse  ");
+        
+        readinput();
+        showNewinput();
+        buzzer();
+        memset(morse, 0, sizeof(morse));
+    }
+    }
+
+
+    if (pressed_buttons & ARCADA_BUTTONMASK_A){ 
+        E2M = 1;
+        
+        while (E2M == 1){
+        for (int i = 0; i < 15; i++){
+          arcada.display->println("                    ");
+        }
+        arcada.display->setCursor(0, 0);
+        arcada.display->println("  Morse to English  ");
+        morseinputs();
+        Serial.println("Made it out");
+        translateMtoE();
+        showNewinput();
+
+    /*
+        pressed_buttons = arcada.readButtons();
+        if (pressed_buttons){
+          takeinputs = 1;
+        }
+        while (takeinputs ==1){
+          morseinputs();
+        }
+        translateMtoE();
+        showNewinput();
+      */
+    }
+
+    }
+    
+
+}
+
+void menu() {
+
+  arcada.display->setTextColor(ARCADA_WHITE, ARCADA_BLACK);
+  arcada.display->setCursor(0, 20);
+
+  arcada.display->println("Welcome to the Morse");
+  arcada.display->println("  Code translator!");
+  arcada.display->println("     ");
+  arcada.display->println("--choose one below--");
+  arcada.display->println("     ");
+  arcada.display->println("Left Button:");
+  arcada.display->println("Morse to English");
+  arcada.display->println("     ");
+  arcada.display->println("Right Button:");
+  arcada.display->print("English to Morse");
+
+
+}
+
+
+void readinput() {
+    int ndx = 0;
+    char endMarker = '\n';
+    char input;
+    
+    while (Serial.available() > 0 && newinput == false) {
+        input = Serial.read();
+        delay(100);
+        //Serial.print(input);
+        if (input != endMarker) {
+            latinText[ndx] = input;
+            morse[ndx] = *EtoM(input, morse);
+            ndx++;
+            if (ndx >= latinTextlength) {
+                ndx = latinTextlength - 1;
+            }
+        }
+        else {
+            latinText[ndx] = '\0'; // terminate the string
+            ndx = 0;
+            newinput = true;
+        }
+    }
+}
+void showNewinput() {
+    if (newinput == true) {
+       Serial.println(latinText);
+       Serial.println(morse);
+        
+        //digitalWrite(WHITE_LED,HIGH);
+        arcada.display->setCursor(0, 30); 
+        for (int i = 0; i < 15; i++){
+          arcada.display->println("                    ");
+        }
+         arcada.display->setCursor(0, 30);
+        int k = 1;
+        for (int x=0;x<strlen(latinText);x++){
+          arcada.display->print(latinText[x]);
+
+          if (x==(k*20)-1){
+          arcada.display->println("     ");
+          k++;
+          }
+        }
+        delay(10);
+    }
+}
+
+void buzzer() {
+  char dot = '.';
+  char dash = '-';
+  char interspace = ' ';
+  char interword = '/';
+
+    if (newinput == true) {
+      for (int x=0;x<strlen(morse);x++){
+        char morsechar = morse[x];
+
+        if(morsechar == dot){
+          tone(ARCADA_AUDIO_OUT,400,50);
+          digitalWrite(WHITE_LED, HIGH);
+          tone(ARCADA_AUDIO_OUT, 1000, 60);
+          delay(60);
+          digitalWrite(WHITE_LED,LOW);
+        }
+        else if (morsechar == dash){
+          digitalWrite(WHITE_LED, HIGH);
+          tone(ARCADA_AUDIO_OUT, 1000, 180);
+          delay(180);
+          digitalWrite(WHITE_LED,LOW);
+
+        }
+        else if (morsechar == interspace){
+          delay(180-60);
+        }
+        else if (morsechar == interword){
+          delay(420-60);
+        }
+        delay(60);
+      }
+        newinput = false;
+    }
+}
+
+void morseinputs() {
+  int takeinputs = 1;
+
+  while (takeinputs == 1){
+  uint8_t pressed_buttons = arcada.readButtons();
+    if (pressed_buttons & ARCADA_BUTTONMASK_A) {
+      counter = millis();
+      pressStartTime = millis();
+      while ((pressed_buttons & ARCADA_BUTTONMASK_A)){
+        pressed_buttons = arcada.readButtons();
+      }
+      pressStopTime = millis();
+      holdTime = pressStopTime - pressStartTime;
+      Serial.println(holdTime);
+      if (holdTime > 150) {
+        // Save a - to the string
+        strcat (morse,"-");
+        i++;
+        delay(25);
+      }
+      else {
+        // Save a . to the string
+        strcat (morse,".");
+        i++;
+        delay(25);
+      }
+    }
+    
+    if (pressed_buttons & ARCADA_BUTTONMASK_B) {
+      counter = millis();
+      pressStartTime = millis();
+      while ((pressed_buttons & ARCADA_BUTTONMASK_B))
+        pressed_buttons = arcada.readButtons();
+
+      pressStopTime = millis();
+      holdTime = pressStopTime - pressStartTime;
+      Serial.println(holdTime);
+      if (holdTime > 150) {
+        // Save a - to the string
+        strcat (morse,"/");
+        i++;
+        delay(25);
+      }
+      else {
+        // Save a . to the string
+        strcat (morse," ");
+        i++;
+        delay(25);
+      }
+    }
+        arcada.display->setCursor(0, 30); 
+        for (int i = 0; i < 15; i++){
+          arcada.display->println("                    ");
+        }
+      int k = 1;
+      arcada.display->setCursor(0, 20);
+      for (int x=0;x<strlen(morse);x++){
+        arcada.display->print(morse[x]);
+
+        if (x==(k*20)-1){
+        arcada.display->println("     ");
+        k++;
+        }
+      }
+        delay(10);
+    uint32_t currenttime = millis();
+    if (currenttime - counter >= 5000){
+      takeinputs = 0;
+    }
+  }
+
+}
+
+void translateMtoE(){
+
+  char *ptr;
+        // first split
+    ptr = strtok(morse,",");
+    //printf("the length of morse code is %lu\n",strlen(ptr));
+    MtoE(ptr,latinText);
+        
+        // second and following split
+    while(ptr != NULL) {
+        ptr = strtok(NULL,",");
+        //printf("the length of morse code is %lu\n",strlen(ptr));
+        if(ptr != NULL) {
+            MtoE(ptr,latinText);
+        }    
+    }
+}
+
+
+char* EtoM(char c,char* morse) {
+    if (c == 'A' || c == 'a') {
+        strcat(morse,".- ");
+    }
+    else if (c == 'B' || c == 'b') {
+        strcat(morse,"-... ");
+    }
+    else if (c == 'C' || c == 'c') {
+        strcat(morse,"-.-. ");
+    }
+    else if (c == 'D' || c == 'd') {
+        strcat(morse,"-.. ");
+    }
+    else if (c == 'E' || c == 'e') {
+        strcat(morse,". ");
+    }
+    else if (c == 'F' || c == 'f') {
+        strcat(morse,"..-. ");
+    }
+    else if (c == 'G' || c == 'g') {
+        strcat(morse,"--. ");
+    }
+    else if (c == 'H' || c == 'h') {
+        strcat(morse,".... ");
+    }
+    else if (c == 'I' || c == 'i') {
+        strcat(morse,".. ");
+    }
+    else if (c == 'J' || c == 'j') {
+        strcat(morse,".--- ");
+    }
+    else if (c == 'K' || c == 'k') {
+        strcat(morse,"-.- ");
+    }
+    else if (c == 'L' || c == 'l') {
+        strcat(morse,".-.. ");
+    }
+    else if (c == 'M' || c == 'm') {
+        strcat(morse,"-- ");
+    }
+    else if (c == 'N' || c == 'n') {
+        strcat(morse,"-. ");
+    }
+    else if (c == 'O' || c == 'o') {
+        strcat(morse,"--- ");
+    }
+    else if (c == 'P' || c == 'p') {
+        strcat(morse,".--. ");
+    }
+    else if (c == 'Q' || c == 'q') {
+        strcat(morse,"--.- ");
+    }
+    else if (c == 'R' || c == 'r') {
+        strcat(morse,".-. ");
+    }
+    else if (c == 'S' || c == 's') {
+        strcat(morse,"... ");
+    }
+    else if (c == 'T' || c == 't') {
+        strcat(morse,"- ");
+    }
+    else if (c == 'U' || c == 'u') {
+        strcat(morse,"..- ");
+    }
+    else if (c == 'V' || c == 'v') {
+        strcat(morse,"...- ");
+    }
+    else if (c == 'W' || c == 'w') {
+        strcat(morse,".-- ");
+    }
+    else if (c == 'X' || c == 'x') {
+        strcat(morse,"-..- ");
+    }
+    else if (c == 'Y' || c == 'y') {
+        strcat(morse,"-.-- ");
+    }
+    else if (c == 'Z' || c == 'z') {
+        strcat(morse,"--.. ");
+    }
+    else if (c == '0') {
+        strcat(morse,"----- ");
+    }
+    else if (c == '1') {
+        strcat(morse,".---- ");
+    }
+    else if (c == '2') {
+        strcat(morse,"..--- ");
+    }
+    else if (c == '3') {
+        strcat(morse,"...-- ");
+    }
+    else if (c == '4') {
+        strcat(morse,"....- ");
+    }
+    else if (c == '5') {
+        strcat(morse,"..... ");
+    }
+    else if (c == '6') {
+        strcat(morse,"-.... ");
+    }
+    else if (c == '7') {
+        strcat(morse,"--... ");
+    }
+    else if (c == '8') {
+        strcat(morse,"---.. ");
+    }
+    else if (c == '9') {
+        strcat(morse,"----. ");
+    }
+    else if (c == '.') {
+        strcat(morse,".-.-.- ");
+    }
+    else if (c == ',') {
+        strcat(morse,"--..-- ");
+    }
+    else if (c == ':') {
+        strcat(morse,"---... ");
+    }
+    else if (c == '?') {
+        strcat(morse,"..--.. ");
+    }
+    else if (c == '\'') {
+        strcat(morse,".----. ");
+    }
+    else if (c == '-') {
+        strcat(morse,"-....- ");
+    }
+    else if (c == '/') {
+        strcat(morse,"-..-. ");
+    }
+    else if (c == '(') {
+        strcat(morse,"-.--. ");
+    }
+    else if (c == ')') {
+        strcat(morse,"-.--.- ");
+    }
+    else if (c == '"') {
+        strcat(morse,".-..-. ");
+    }
+    else if (c == '&') {
+        strcat(morse,".-... ");
+    }
+    else if (c= ' ') {
+        strcat(morse,"/  ");
+    }
+    return morse;
+}
+
+  
+char* MtoE(char* segment,char* output) {
+    if (strcmp(segment,".-") == 0) {
+        strcat(output,"a");
+    }
+    else if (strcmp(segment,"-...") == 0) {
+        strcat(output,"b");
+    }
+    else if (strcmp(segment,"-.-.") == 0) {
+        strcat(output,"c");
+    }
+    else if (strcmp(segment,"-..") == 0) {
+        strcat(output,"d");
+    }
+    else if (strcmp(segment,".") == 0 && strlen(segment) == 1) {
+        strcat(output,"e");
+    }
+    else if (strcmp(segment,"..-.") == 0) {
+        strcat(output,"f");
+    }
+    else if (strcmp(segment,"--.") == 0) {
+        strcat(output,"g");
+    }
+    else if (strcmp(segment,"....") == 0) {
+        strcat(output,"h");
+    }
+    else if (strcmp(segment,"..") == 0 && strlen(segment) == 2) {
+        strcat(output,"i");
+    }
+    else if (strcmp(segment,".---") == 0) {
+        strcat(output,"j");
+    }
+    else if (strcmp(segment,"-.-") == 0) {
+        strcat(output,"k");
+    }
+    else if (strcmp(segment,".-..") == 0) {
+        strcat(output,"l");
+    }
+    else if (strcmp(segment,"--") == 0) {
+        strcat(output,"m");
+    }
+    else if (strcmp(segment,"-.") == 0) {
+        strcat(output,"n");
+    }
+    else if (strcmp(segment,"---") == 0) {
+        strcat(output,"o");
+    }
+    else if (strcmp(segment,".--.") == 0) {
+        strcat(output,"p");
+    }
+    else if (strcmp(segment,"--.-") == 0) {
+        strcat(output,"q");
+    }
+    else if (strcmp(segment,".-.") == 0) {
+        strcat(output,"r");
+    }
+    else if (strcmp(segment,"...") == 0) {
+        strcat(output,"s");
+    }
+    else if (strcmp(segment,"-") == 0) {
+        strcat(output,"t");
+    }
+    else if (strcmp(segment,"..-") == 0) {
+        strcat(output,"u");
+    }
+    else if (strcmp(segment,"...-") == 0) {
+        strcat(output,"v");
+    }
+    else if (strcmp(segment,".--") == 0) {
+        strcat(output,"w");
+    }
+    else if (strcmp(segment,"-..-") == 0) {
+        strcat(output,"x");
+    }
+    else if (strcmp(segment,"-.--") == 0) {
+        strcat(output,"y");
+    }
+    else if (strcmp(segment,"--..") == 0) {
+        strcat(output,"z");
+    }
+    else if (strcmp(segment,"-----") == 0) {
+        strcat(output,"0");
+    }
+    else if (strcmp(segment,".----") == 0) {
+        strcat(output,"1");
+    }
+    else if (strcmp(segment,"..---") == 0) {
+        strcat(output,"2");
+    }
+    else if (strcmp(segment,"...--") == 0) {
+        strcat(output,"3");
+    }
+    else if (strcmp(segment,"....-") == 0) {
+        strcat(output,"4");
+    }
+    else if (strcmp(segment,".....") == 0) {
+        strcat(output,"5");
+    }
+    else if (strcmp(segment,"-....") == 0) {
+        strcat(output,"6");
+    }
+    else if (strcmp(segment,"--...") == 0) {
+        strcat(output,"7");
+    }
+    else if (strcmp(segment,"---..") == 0) {
+        strcat(output,"8");
+    }
+    else if (strcmp(segment,"----.") == 0) {
+        strcat(output,"9");
+    }
+    else if (strcmp(segment,".-.-.-") == 0) {
+        strcat(output,".");
+    }
+    else if (strcmp(segment,"--..--") == 0) {
+        strcat(output,",");
+    }
+    else if (strcmp(segment,"---...") == 0) {
+        strcat(output,":");
+    }
+    else if (strcmp(segment,"..--..") == 0) {
+        strcat(output,"?");
+    }
+    else if (strcmp(segment,".----.") == 0) {
+        strcat(output,"\'");
+    }
+    else if (strcmp(segment,"-....-") == 0) {
+        strcat(output,"-");
+    }
+    else if (strcmp(segment,"-..-.") == 0) {
+        strcat(output,"/");
+    }
+    else if (strcmp(segment,"-.--.") == 0) {
+        strcat(output,"(");
+    }
+    else if (strcmp(segment,"-.--.-") == 0) {
+        strcat(output,")");
+    }
+    else if (strcmp(segment,".-..-.") == 0) {
+        strcat(output,"\"");
+    }
+    else if (strcmp(segment,".-...") == 0) {
+        strcat(output,"&");
+    }
+    else if (strcmp(segment,"/") == 0) {
+        strcat(output," ");
+    }
+    return output;
+}
+
