@@ -9,9 +9,6 @@
 // main function
 
 void main() {
-    char Double[2]  = " ";
-    char single[]  = " ";
-    strcat(Double,single);
     int OpeNum;
     while(OpeNum != 2) {
         operation();
@@ -45,12 +42,12 @@ void main() {
         char latinText[280];
         char *ptr;
             // first split
-        ptr = strtok(morseText,Double);
+        ptr = strtok(morseText," ");
         MtoE(ptr,latinText);
             
             // second and following split
         while(ptr != NULL) {
-            ptr = strtok(NULL,Double);
+            ptr = strtok(NULL," ");
             if(ptr != NULL) {
                 MtoE(ptr,latinText);
             }    

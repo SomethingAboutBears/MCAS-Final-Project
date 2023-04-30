@@ -144,7 +144,7 @@ char* EtoM(char c,char* morse) {
     else if (c == '?') {
         strcat(morse,"..--.. ");
     }
-    else if (c == '\'') {
+    else if (c == "\\") {
         strcat(morse,".----. ");
     }
     else if (c == '-') {
@@ -294,7 +294,7 @@ char* MtoE(char* segment,char* output) {
         strcat(output,"?");
     }
     else if (strcmp(segment,".----.") == 0) {
-        strcat(output,"\'");
+        strcat(output,"\\");
     }
     else if (strcmp(segment,"-....-") == 0) {
         strcat(output,"-");
@@ -307,9 +307,6 @@ char* MtoE(char* segment,char* output) {
     }
     else if (strcmp(segment,"-.--.-") == 0) {
         strcat(output,")");
-    }
-    else if (strcmp(segment,".-..-.") == 0) {
-        strcat(output,"\"");
     }
     else if (strcmp(segment,".-...") == 0) {
         strcat(output,"&");
