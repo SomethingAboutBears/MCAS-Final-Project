@@ -4,30 +4,34 @@
 #include<math.h>
 #include<ctype.h>
 
-char* MtoE(char* segment, char* output);
+char* MtoE(char* segment,char* output);
 
 void main() {
+
     char morseText[3920];
-    printf("Input your text (please use Latin characters with no diacritics and numbers only) \n");
+    printf("Input your text (please use Latin characters with no diacritics and numbers only ->) \n");
     fgets(morseText, 3920, stdin);
+
+    // define output and its pointer
     char latinText[280];
     char *ptr;
-
-    // first trial
-    ptr = strtok(morseText,"  ");
-    printf("%s\n",ptr);
+        // first split
+    ptr = strtok(morseText,",");
+    //printf("the length of morse code is %lu\n",strlen(ptr));
     MtoE(ptr,latinText);
+        
+        // second and following split
     while(ptr != NULL) {
-        ptr = strtok(NULL,"  ");
+        ptr = strtok(NULL,",");
+        //printf("the length of morse code is %lu\n",strlen(ptr));
         if(ptr != NULL) {
             MtoE(ptr,latinText);
-            printf("%s\n",ptr);
-        }
+        }    
     }
-    
-    printf("The Latin text as written is: %s \n",latinText);
-}
 
+    printf("The Latin text as written is: %s \n",latinText);
+
+}
 
 char* MtoE(char* segment,char* output) {
     if (strcmp(segment,".-") == 0) {
@@ -40,9 +44,9 @@ char* MtoE(char* segment,char* output) {
         strcat(output,"c");
     }
     else if (strcmp(segment,"-..") == 0) {
-        strcat(output,"dd");
+        strcat(output,"d");
     }
-    else if (strcmp(segment,".") == 0) {
+    else if (strcmp(segment,".") == 0 && strlen(segment) == 1) {
         strcat(output,"e");
     }
     else if (strcmp(segment,".-.") == 0) {
@@ -54,14 +58,11 @@ char* MtoE(char* segment,char* output) {
     else if (strcmp(segment,"....") == 0) {
         strcat(output,"h");
     }
-    else if (strcmp(segment,"..") == 0) {
+    else if (strcmp(segment,"..") == 0 && strlen(segment) == 2) {
         strcat(output,"i");
     }
     else if (strcmp(segment,"-.-.") == 0) {
         strcat(output,"j");
-    }
-    else if (strcmp(segment,"-.-") == 0) {
-        strcat(output,"k");
     }
     else if (strcmp(segment,"-.-") == 0) {
         strcat(output,"k");
