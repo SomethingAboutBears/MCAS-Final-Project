@@ -43,7 +43,7 @@ int runTranslators= 0;
 
 //char latinText[280]; // For taking in a input from the serial
 uint8_t inputs = 0;
-uint8_t takeinputs = 0;
+uint8_t takeinputs =0;
 // String input;
 //const int latinTextlength = 280;
 char* EtoM(char c,char* morse);
@@ -64,7 +64,6 @@ char morse[1500];
   uint32_t pressStopTime = 0;
   uint32_t holdTime = 0;
   uint32_t counter = 0;
-  uint32_t currenttime =0;
 
 // Check the timer callback, this function is called every millisecond!
 volatile uint16_t milliseconds = 0;
@@ -144,7 +143,7 @@ uint8_t pressed_buttons = arcada.readButtons();
         }
         arcada.display->setCursor(0, 0);
         arcada.display->println("  Morse to English  ");
-        takeinputs = 1;
+        int takeinputs = 1;
         int clearscreen = 1;
         if (clearscreen == 1){
           for (int i = 0; i < 15; i++){
@@ -152,9 +151,10 @@ uint8_t pressed_buttons = arcada.readButtons();
           }
           clearscreen = 0;
         }
-        while (takeinputs ==1){
+        while (takeinputs == 1){
           morseinputs();
         }
+        
         //Serial.println("Made it out");
         translateMtoE();
         Serial.println(morse);
@@ -162,6 +162,17 @@ uint8_t pressed_buttons = arcada.readButtons();
         showNewinput();
         memset(morse, 0, sizeof(morse));
 
+    /*
+        pressed_buttons = arcada.readButtons();
+        if (pressed_buttons){
+          takeinputs = 1;
+        }
+        while (takeinputs ==1){
+          morseinputs();
+        }
+        translateMtoE();
+        showNewinput();
+      */
     }
 
     }
@@ -255,13 +266,13 @@ void buzzer() {
         if(morsechar == dot){
           tone(ARCADA_AUDIO_OUT,400,50);
           digitalWrite(WHITE_LED, HIGH);
-          tone(ARCADA_AUDIO_OUT, 1000, 60);
+          //tone(ARCADA_AUDIO_OUT, 1000, 60);
           delay(60);
           digitalWrite(WHITE_LED,LOW);
         }
         else if (morsechar == dash){
           digitalWrite(WHITE_LED, HIGH);
-          tone(ARCADA_AUDIO_OUT, 1000, 180);
+          //tone(ARCADA_AUDIO_OUT, 1000, 180);
           delay(180);
           digitalWrite(WHITE_LED,LOW);
 
@@ -335,17 +346,12 @@ void morseinputs() {
         k++;
         }
       }
-    if (counter >0){
-      currenttime = millis();
-    }
-    Serial.println(currenttime-counter);
-    if ((currenttime - counter) >= 5000){
+    uint32_t currenttime = millis();
+    if (currenttime - counter >= 5000){
       takeinputs = 0;
       newinput = true;
-      //Serial.println("I AM BEING CALLED TO THE HEAVENS");
-      return;
     }
-}
+  }
 
 void translateMtoE(){
 
@@ -354,14 +360,14 @@ void translateMtoE(){
     ptr = strtok(morse,",");
     //printf("the length of morse code is %lu\n",strlen(ptr));
     //char* MtoE(char* segment,char* output)
-    MtoE(ptr,latinText);
+    *MtoE(ptr,latinText);
         
         // second and following split
     while(ptr != NULL) {
         ptr = strtok(NULL,",");
         //printf("the length of morse code is %lu\n",strlen(ptr));
         if(ptr != NULL) {
-            MtoE(ptr,latinText);
+            *MtoE(ptr,latinText);
         }    
     }
 }
